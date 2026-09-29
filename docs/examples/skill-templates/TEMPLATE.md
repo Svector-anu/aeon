@@ -28,7 +28,7 @@ That copies `templates/crypto-tracker/SKILL.md` → `skills/my-token-watcher/SKI
 
 If you don't pass `--var` flags, the script copies the file verbatim and prints the list of tokens that still need replacement before the skill will run cleanly.
 
-Add `--category <pack>` to choose which pack the skill joins. Valid categories are the six packs: `core`, `evolution`, `basics`, `dev`, `crypto`, `productivity` (see [`docs/skill-packs.md`](../../skill-packs.md)). Without it the skill keeps the template's default: `crypto-tracker` → `crypto`, `code-reviewer` and `deploy-watcher` → `dev`, `research-digest` → `basics`, `social-monitor` and `community-manager` → `productivity`.
+Add `--category <pack>` to choose which pack the skill joins. Valid categories are the six packs: `core`, `evolution`, `basics`, `dev`, `crypto`, `productivity` (see [`docs/skill-packs.md`](../../skill-packs.md)). Without it the skill keeps the template's default: `crypto-tracker` → `crypto`, `code-reviewer` and `deploy-watcher` → `dev`, `research-digest`, `social-monitor` and `community-manager` → `productivity`.
 
 ```bash
 bin/new-from-template --list                    # print available templates
