@@ -1,6 +1,6 @@
 # Skill packs
 
-Aeon ships **60+ skills**, but most forks only ever run a handful. Packs make
+Aeon ships **85 skills**, but most forks only ever run a handful. Packs make
 that manageable: by default the dashboard shows **Core** (what makes Aeon
 different) and **Basics** (simple skills you can run right now) — everything else
 is grouped into **packs** that stay hidden until you enable them.
@@ -119,7 +119,8 @@ description: ...
 
 The authoring tools set it for you:
 
-- **`bin/new-from-template <tmpl> <name> --category dev`** — stamps the category
+- **`bin/new-from-template <tmpl> <name> --category dev`** - stamps the category,
+  one of `core`, `evolution`, `basics`, `dev`, `crypto`, `productivity`
   (templates also ship a sensible default).
 - **`create-skill`** — chooses a category as part of its design step.
 - **Dashboard → Hire (import)** — a Pack dropdown writes the category onto the

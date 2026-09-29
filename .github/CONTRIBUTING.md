@@ -48,6 +48,10 @@ for the dashboard app itself is documented in
 bin/new-from-template <template> <skill-name> --category <pack>
 ```
 
+`<pack>` is one of the six categories: `core`, `evolution`, `basics`, `dev`,
+`crypto`, `productivity` (see [`docs/skill-packs.md`](../docs/skill-packs.md)).
+Leave it off to keep the template's own default.
+
 Every `SKILL.md` opens with YAML frontmatter — the full contract is in
 [`docs/examples/skill-templates/TEMPLATE.md`](../docs/examples/skill-templates/TEMPLATE.md). Essentials:
 
