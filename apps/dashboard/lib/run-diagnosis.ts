@@ -116,7 +116,9 @@ export function parseUsage(text: string): Usage | null {
 // Known failure signatures, most specific first. Reasons are our own words:
 // never echo log text back, it can carry provider responses.
 const SIGNATURES: { re: RegExp; reason: string; hint: string; credential: boolean }[] = [
-  { re: /\b401\b|invalid[ _-]?(api[ _-]?)?key|invalid x-api-key|authentication_error|unauthori[sz]ed|token (has )?expired|invalid_grant/i,
+  { re: /token (has )?expired|invalid_grant|refresh token (is )?(invalid|revoked)|session (has )?expired/i,
+    reason: 'The saved login has expired.', hint: 'Log in again and paste the new login.', credential: true },
+  { re: /\b401\b|invalid[ _-]?(api[ _-]?)?key|invalid x-api-key|authentication_error|unauthori[sz]ed/i,
     reason: 'The provider rejected the credential.', hint: 'Paste a fresh key or log in again.', credential: true },
   { re: /\b402\b|insufficient[ _](credits|funds|balance|quota)|credit balance is too low|exceeded your current quota|payment required/i,
     reason: 'The provider account is out of credit.', hint: 'Top up the account or connect a different key.', credential: true },
