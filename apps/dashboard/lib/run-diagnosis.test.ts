@@ -158,6 +158,19 @@ describe('run log slicing', () => {
     assert.equal(extractRunOutput(runLog(usageLine(1, 1))).harness, null)
     assert.equal(failed(runLog(line('Run', 'Using harness: pi  |  model: x'), line('Run', '##[error]401 unauthorized')))?.harness, 'pi')
   })
+
+  it('reads the real banner line from a gh log, and falls back to the effective model notice', () => {
+    // As printed by aeon.yml's Run step (echo "Using harness: $HARNESS  |  model: $BANNER_MODEL").
+    const banner = 'run\tUNKNOWN STEP\t2026-10-03T08:14:02.5512345Z Using harness: kimi  |  model: kimi-k2.5'
+    const effective = (h: string) => `run\tUNKNOWN STEP\t2026-10-03T08:15:40.1234567Z ##[notice]effective model for ${h}: some-model`
+    const tail = 'run\tUNKNOWN STEP\t2026-10-03T08:15:41.0000000Z ##[notice]Token usage - input: 0, output: 0, total: 0'
+    assert.equal(extractRunOutput([banner, effective('cursor'), tail].join('\n')).harness, 'kimi')
+    // No banner: the notice names the harness.
+    assert.equal(extractRunOutput([effective('codex'), tail].join('\n')).harness, 'codex')
+    // The notice's script echo ($HARNESS) never counts.
+    const echoed = ['##[group]Run x', 'echo "::notice::effective model for $HARNESS: $M"', '##[endgroup]'].map((t) => line('Run', t))
+    assert.equal(extractRunOutput(runLog(...echoed, usageLine(1, 1))).harness, null)
+  })
 })
 
 describe('failed-run diagnosis', () => {

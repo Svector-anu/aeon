@@ -32,7 +32,8 @@ export interface RunOutput {
   problems: string
   // The Run step got as far as the model call (the usage notice is printed).
   reachedModel: boolean
-  // From the Run step's "Using harness: X | model: Y" banner; null if absent.
+  // From the Run step's "Using harness: X | model: Y" banner, else the
+  // "effective model for X:" notice; null if neither is printed.
   harness: string | null
 }
 
@@ -44,6 +45,9 @@ const TS = /^﻿?\d{4}-\d{2}-\d{2}T[\d:.]+Z ?/
 const USAGE_NOTICE = /^(##\[notice\]|::notice::)Token usage\b.*\binput:\s*\d+/
 // The Run step prints this once it has picked the harness.
 const HARNESS_BANNER = /^Using harness:\s*([a-z]+)\b/
+// Fallback when the banner is missing: "::notice::effective model for X: M",
+// printed after the harness call (every harness but grok).
+const HARNESS_NOTICE = /^(?:##\[notice\]|::notice::)effective model for ([a-z]+):/
 
 interface LogLine { step: string | null; text: string }
 
@@ -81,8 +85,13 @@ export function extractRunOutput(log: string): RunOutput {
   const all = normalize(log)
   const outside = outsideGroups(all).map((l) => l.text)
   const problems = outside.filter((t) => /^##\[(error|warning)\]/.test(t))
-  let harness: string | null = null
-  for (const t of outside) harness = HARNESS_BANNER.exec(t)?.[1] ?? harness
+  let banner: string | null = null
+  let effective: string | null = null
+  for (const t of outside) {
+    banner = HARNESS_BANNER.exec(t)?.[1] ?? banner
+    effective = HARNESS_NOTICE.exec(t)?.[1] ?? effective
+  }
+  const harness = banner ?? effective
   const lines = all.some((l) => l.step === 'Run') ? all.filter((l) => l.step === 'Run') : all
 
   let anchor = -1
