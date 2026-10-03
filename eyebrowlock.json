@@ -2295,11 +2295,11 @@
       "files": [
         {
           "path": "SKILL.md",
-          "hash": "33aa4e876c3991ec510bb91e31274382df5ced2440ddcd4ae1afaa1984e52990"
+          "hash": "b8444fa97737d750da36868c5934f4d7eaf377c0a4437f58afa79086874744f9"
         },
         {
           "path": "references/ci.md",
-          "hash": "5e7b4aa332490311995b3374ec584948cc28cb2d2dc23da4868cf1317d41829b"
+          "hash": "1b88ee9213eb76c3b4b8f5339db74e93e6e5df41d84e2beb3c025e54e8914b96"
         },
         {
           "path": "references/history-mining.md",
@@ -2319,14 +2319,14 @@
         },
         {
           "path": "references/skill-anatomy.md",
-          "hash": "ecafe928090cde3f80ecfcae4eb26fcf151e3a5f8f752e78bf63e9abc24c6b77"
+          "hash": "555b05687d9bb4200abde819edaa75b4c53d271aff65eb71f9d36989ae4cada3"
         },
         {
           "path": "scripts/mine-history.mjs",
           "hash": "605fe60e77d6bd306f1a86327f659b73483cad4e6eb66b65f4259de0def6d815"
         }
       ],
-      "contentHash": "sha256-f775d34746a0f3743dcd37e030b34a84f0c46e2bffe00dd96095a6027ba6c030",
+      "contentHash": "sha256-c86b9226685bb0e6b678e14784ad64f93fb72134f05cf33c197efe54cafd6534",
       "discoveredFrom": ".claude/skills/aeon/SKILL.md"
     },
     {
