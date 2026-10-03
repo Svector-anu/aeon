@@ -125,7 +125,7 @@ describe('failed-run diagnosis', () => {
   it('maps real failure output to a plain reason and a concrete next step', () => {
     const cases: [string, RegExp, boolean][] = [
       [line('Run', '##[error]run-harness claude failed: 401 {"type":"authentication_error"}'), /fresh key/, true],
-      [line('Run', '##[error]codex: 401 refresh failed: invalid_grant'), /Log in again and paste the new login/, true],
+      [line('Run', '##[error]codex: 401 refresh failed: invalid_grant'), /Log in again and connect the new login/, true],
       [line('Run', '##[error]OAuth token has expired'), /Log in again/, true],
       [line('Run', '##[error]insufficient_quota: You exceeded your current quota'), /Top up/, true],
       [line('Run', '##[error]HTTP 429 rate limit'), /Wait a minute/, false],
