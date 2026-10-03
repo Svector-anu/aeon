@@ -286,7 +286,7 @@ export function ConnectModal({ harness, patSet, onClose, onSaved, onGoToSecret }
               <button onClick={() => setShowProvider(true)} className="mt-1 text-[10px] font-mono text-primary-40 hover:text-aeon-fg">Wrong provider? Pick it</button>
             ) : null}
             {harness === 'claude' && (
-              <p className="text-[10px] text-primary-40 font-mono mt-2 leading-relaxed">GitHub servers sometimes reject Claude subscription tokens. If runs fail or show zero token usage, use an API key or OpenRouter instead.</p>
+              <p className="text-[10px] text-primary-40 font-mono mt-2 leading-relaxed">If a run fails, the Why? toggle on HQ says why. An API key or OpenRouter also works.</p>
             )}
             {harness === 'grok' && !patSet && (
               <p className="text-[10px] text-primary-40 font-mono mt-2 leading-relaxed">

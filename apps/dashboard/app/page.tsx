@@ -28,8 +28,18 @@ import { PacksPanel } from '../components/PacksPanel'
 import { RightPanel } from '../components/RightPanel'
 import { ImportModal } from '../components/ImportModal'
 import { ConnectModal, type SavedCredential } from '../components/ConnectModal'
-import { OnboardingChecklist } from '../components/OnboardingChecklist'
+import { OnboardingChecklist, type NotifyChannel } from '../components/OnboardingChecklist'
 import { PanelError } from '../components/PanelError'
+
+
+// The secret each notification channel's setup starts at: the first one of
+// its pair that is still missing (see ./notify's opt-in secrets).
+const NOTIFY_FIRST_SECRET: Record<NotifyChannel, (isSet: (n: string) => boolean) => string> = {
+  telegram: (isSet) => (isSet('TELEGRAM_BOT_TOKEN') ? 'TELEGRAM_CHAT_ID' : 'TELEGRAM_BOT_TOKEN'),
+  discord: () => 'DISCORD_WEBHOOK_URL',
+  slack: () => 'SLACK_WEBHOOK_URL',
+  email: (isSet) => (isSet('RESEND_API_KEY') ? 'NOTIFY_EMAIL_TO' : 'RESEND_API_KEY'),
+}
 
 export default function Dashboard() {
   const [view, setView] = useState<DashboardView>('hq')
@@ -172,7 +182,7 @@ export default function Dashboard() {
   useEffect(() => { mainScrollRef.current?.scrollTo({ top: 0 }) }, [view, selectedSkill])
 
   const toggleSkill = async (n: string, en: boolean) => { setBusy(b => ({ ...b, [n]: true })); try { const { ok, data } = await patchJson<SyncResult>('/api/skills', { name: n, enabled: en }); if (ok) { setSkills(s => s.map(sk => sk.name === n ? { ...sk, enabled: en } : sk)); flashSynced(`${displayName(n)} ${en ? 'enabled' : 'disabled'}`, data) } else { flash(`${displayName(n)} update failed`) } } catch { flash('Network error') } finally { setBusy(b => ({ ...b, [n]: false })) } }
-  const runSkill = async (n: string, v?: string, sm?: string) => { if (!secrets.some(s => s.isSet && authSecretsForHarness(harness).includes(s.name))) { flash(secretsReadOk ? 'No provider key set - add one in Settings before running skills' : "Couldn't read repo secrets - GitHub API error or gh not authenticated. Retry, or run `gh auth login`."); return } setBusy(b => ({ ...b, [`r-${n}`]: true })); try { const { ok, data } = await postJson<ErrorResponse>(`/api/skills/${n}/run`, { var: v || '', model: sm || model }); if (ok) { flash(`${displayName(n)} started`); scheduleRunRefresh(refreshRuns) } else { flash(data.error || 'Failed') } } finally { setBusy(b => ({ ...b, [`r-${n}`]: false })) } }
+  const runSkill = async (n: string, v?: string, sm?: string) => { if (!secrets.some(s => s.isSet && authSecretsForHarness(harness).includes(s.name))) { flash(secretsReadOk ? 'No model connected yet - connect a model before running skills' : "Couldn't read repo secrets - GitHub API error or gh not authenticated. Retry, or run `gh auth login`."); return } setBusy(b => ({ ...b, [`r-${n}`]: true })); try { const { ok, data } = await postJson<ErrorResponse>(`/api/skills/${n}/run`, { var: v || '', model: sm || model }); if (ok) { flash(`${displayName(n)} started`); scheduleRunRefresh(refreshRuns) } else { flash(data.error || 'Failed') } } finally { setBusy(b => ({ ...b, [`r-${n}`]: false })) } }
   const updateSchedule = async (n: string, s: string) => { try { const { ok, data } = await patchJson<SyncResult>('/api/skills', { name: n, schedule: s }); if (ok) { setSkills(sk => sk.map(x => x.name === n ? { ...x, schedule: s } : x)); flashSynced('Schedule updated', data) } } catch { flash('Network error') } }
   const updateVar = async (n: string, v: string) => { try { const { ok, data } = await patchJson<SyncResult>('/api/skills', { name: n, var: v }); if (ok) { setSkills(s => s.map(x => x.name === n ? { ...x, var: v } : x)); flashSynced('Brief updated', data) } } catch { flash('Network error') } }
   const updateSkillModel = async (n: string, m: string) => { try { const { ok, data } = await patchJson<SyncResult>('/api/skills', { name: n, skillModel: m }); if (ok) { setSkills(s => s.map(x => x.name === n ? { ...x, model: m } : x)); flashSynced('Capability updated', data) } } catch { flash('Network error') } }
@@ -224,7 +234,7 @@ export default function Dashboard() {
   // Setup checklist input that needs its own read: whether Actions is on.
   useEffect(() => { if (!loading) getJson<{ actionsEnabled: boolean | null }>('/api/onboarding').then(d => setActionsEnabled(d.actionsEnabled)).catch(() => {}) }, [loading])
 
-  // Jump from a skill's API-keys panel straight to Settings → Access Keys,
+  // Jump from a skill's API-keys panel straight to Keys → Access Keys,
   // scrolled to the chosen key with its input open and ready to paste.
   const goToSecret = (name: string) => { setSelectedSkill(null); setView('secrets'); setSecretFocus(name) }
   const goToMcp = () => { setSelectedSkill(null); setView('mcp') }
@@ -254,6 +264,9 @@ export default function Dashboard() {
     return FIRST_PARTY_KEYS.has(k) ? enabledPacks.includes(k) : true
   })
   const enabledCount = visibleSkills.filter(s => s.enabled).length
+  // "Skills picked" on the setup checklist: a skill the operator turned on
+  // beyond heartbeat, which a fresh aeon.yml ships enabled.
+  const skillsPicked = skills.some(s => s.enabled && s.name !== 'heartbeat')
   const workingCount = runs.filter(r => r.status === 'in_progress').length
 
   if (loading) return <LoadingScreen />
@@ -323,9 +336,10 @@ export default function Dashboard() {
               checklist={
                 <OnboardingChecklist
                   repo={repo} actionsEnabled={actionsEnabled} harness={harness} hasModelKey={hasModelKey}
-                  notificationsSet={notificationsSet} firstRunDone={firstRunDone}
+                  skillsPicked={skillsPicked} notificationsSet={notificationsSet} firstRunDone={firstRunDone}
                   onConnect={() => setConnectFor({ harness })}
-                  onNotifications={() => goToSecret(isSet('TELEGRAM_BOT_TOKEN') ? 'TELEGRAM_CHAT_ID' : 'TELEGRAM_BOT_TOKEN')}
+                  onPickSkills={() => { setSelectedSkill(null); setView('packs') }}
+                  onNotifications={(c) => goToSecret(NOTIFY_FIRST_SECRET[c](isSet))}
                   onFirstRun={() => { const first = visibleSkills.find(s => s.enabled); if (first) { setSelectedSkill(first.name); setView('hq') } else setView('packs') }}
                 />
               } />

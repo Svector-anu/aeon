@@ -26,7 +26,7 @@ interface TopBarProps {
 export function viewTitle(skill: Skill | null, view: DashboardView, repo: string): string {
   if (skill) return displayName(skill.name)
   if (view === 'packs') return 'Packs'
-  if (view === 'secrets') return 'Settings'
+  if (view === 'secrets') return 'Keys'
   if (view === 'strategy') return 'Strategy'
   if (view === 'mcp') return 'MCP'
   if (view === 'soul') return 'Soul'
@@ -59,8 +59,8 @@ export function TopBar({ skill, view, repo, model, harness, gateway, hasModelKey
           <span className="text-[10px] font-mono px-2 py-0.5 bg-aeon-red/10 text-aeon-red uppercase tracking-[0.18em] border border-aeon-red/30">{gateway}</span>
         )}
         {!hasModelKey && (
-          <button onClick={onSetupAuth} title="Connect a model for this harness" className="btn-solid-sm">
-            Auth
+          <button onClick={onSetupAuth} title="Connect a model so skills can run" className="btn-solid-sm whitespace-nowrap">
+            Connect a model
           </button>
         )}
         <select

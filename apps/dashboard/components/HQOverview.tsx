@@ -141,7 +141,7 @@ export function HQOverview({ skills, runs, enabledCount, workingCount, categoryF
           {!runs.length && (
             <div className="px-6 py-12 text-center">
               <p className="font-display uppercase text-aeon-fg text-xl tracking-wide">Nothing yet</p>
-              <p className="text-[11px] text-primary-40 font-mono mt-2 uppercase tracking-[0.18em]">The fleet is waiting for its first run</p>
+              <p className="text-[11px] text-primary-40 font-mono mt-2 uppercase tracking-[0.18em]">Open any skill and press Run, or use Run one in the setup list</p>
             </div>
           )}
         </div>

@@ -42,7 +42,7 @@ function Section({ label, action, children }: { label: string; action?: React.Re
 }
 
 // A single declared credential. The key name and the right-hand action both
-// jump to Settings → Access Keys, scrolled to this key with its input open —
+// jump to Keys → Access Keys, scrolled to this key with its input open -
 // so the operator can paste the value in one click.
 function KeyRow({ kref, secret, harness, onGoTo }: { kref: SkillKeyRef; secret?: Secret; harness: string; onGoTo: (name: string) => void }) {
   const isSet = !!secret?.isSet
@@ -65,7 +65,7 @@ function KeyRow({ kref, secret, harness, onGoTo }: { kref: SkillKeyRef; secret?:
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
             <span className={`w-2 h-2 rounded-full shrink-0 ${dot}`} />
-            <button onClick={() => onGoTo(kref.key)} title="Open in Settings to set this key" className="font-mono text-xs text-aeon-fg hover:text-aeon-red underline decoration-dotted underline-offset-2 transition-colors">{kref.key}</button>
+            <button onClick={() => onGoTo(kref.key)} title="Open in Keys to set this key" className="font-mono text-xs text-aeon-fg hover:text-aeon-red underline decoration-dotted underline-offset-2 transition-colors">{kref.key}</button>
             <span className={`text-[9px] font-mono uppercase tracking-[0.18em] ${tierColor}`}>{tierLabel}</span>
             <span className="text-[9px] font-mono uppercase tracking-[0.18em] text-primary-35">{statusText}</span>
           </div>
@@ -141,7 +141,7 @@ export function SkillDetail({ skill, runs, model, harness, secrets, mcpServers, 
   const statusTextCls = st.color === 'green' ? 'text-aeon-green' : st.color === 'orange' ? 'text-aeon-amber' : st.color === 'red' ? 'text-aeon-red-alert' : 'text-primary-50'
 
   // Join the skill's declared `requires` against the central credential registry
-  // (the same list shown in Settings → Access Keys) for descriptions + set state.
+  // (the same list shown in Keys → Access Keys) for descriptions + set state.
   const secretByName = new Map(secrets.map(s => [s.name, s]))
   const requires = skill.requires ?? []
   const requiredKeys = requires.filter(r => !r.optional)
@@ -276,7 +276,7 @@ export function SkillDetail({ skill, runs, model, harness, secrets, mcpServers, 
                 {missingRequired.map((r, i) => (
                   <span key={r.key}>
                     {i > 0 && ', '}
-                    <button onClick={() => onGoToSecret(r.key)} title="Open in Settings to set this key" className="text-aeon-red-alert underline decoration-dotted underline-offset-2 hover:text-aeon-fg transition-colors">{r.key}</button>
+                    <button onClick={() => onGoToSecret(r.key)} title="Open in Keys to set this key" className="text-aeon-red-alert underline decoration-dotted underline-offset-2 hover:text-aeon-fg transition-colors">{r.key}</button>
                   </span>
                 ))}
               </p>

@@ -173,7 +173,7 @@ Per-skill execution state (`memory/cron-state.json` — status, success rate, qu
   <img src="../docs/assets/providers.jpg" alt="9 ways to power Claude Code: Claude subscription, Anthropic API, OpenRouter, Bankr, UsePod, Venice, Surplus, Grok, GLM" width="640" />
 </p>
 
-Aeon can power Claude Code **ten** ways. Two are **direct** to Anthropic; the other eight route through a **gateway**. Add a credential in the dashboard's Connect modal (Connect a model) and it's saved as the secret below (HivemindOS is not in the modal yet - set `HIVEMINDOS_CREDIT_TOKEN` as a repo secret directly). (Separately, the [Grok Build harness](harnesses.md) runs the `grok` CLI instead of Claude Code - that's a different axis from the gateways here.)
+Aeon can power Claude Code **ten** ways. Two are **direct** to Anthropic; the other eight route through a **gateway**. Press **Connect a model** in the dashboard to add a credential; it's saved as the secret below (HivemindOS is not in the modal yet - set `HIVEMINDOS_CREDIT_TOKEN` as a repo secret directly). (Separately, the [Grok Build harness](harnesses.md) runs the `grok` CLI instead of Claude Code - that's a different axis from the gateways here.)
 
 **Routing is automatic.** `aeon.yml` ships `gateway: { provider: auto }`, and each run resolves the live provider from *whichever secrets are set*, in priority order - so adding or removing a key changes routing with no re-config:
 
@@ -279,7 +279,7 @@ Private repos: Free plan = 2,000 min/mo, Pro/Team = 3,000 + $0.008/min overage. 
 
 ## Authentication
 
-Aeon needs **at least one** way to reach a model. Add it in the dashboard's **Connect** modal (**Connect a model**, in [Aeon Connect](https://www.aeon.fun/connect) or the local `./aeon` dashboard), or from the terminal with `aeon auth`:
+Aeon needs **at least one** way to reach a model. Add it with **Connect a model** in the dashboard (in [Aeon Connect](https://www.aeon.fun/connect) or the local `./aeon` dashboard), or from the terminal with `aeon auth`:
 
 - **A Claude subscription** - one-click OAuth, or `claude setup-token` on the CLI (prints an `sk-ant-oat01-…` token, valid 1 year).
 - **An API key** - Anthropic, Anthropic-compatible, or an [LLM gateway](#llm-gateways) key (Bankr, OpenRouter, Surplus, Venice, UsePod). Paste it and the provider is auto-detected from its prefix.
@@ -361,4 +361,4 @@ Skills that call third-party APIs declare their credentials in a `requires:` fro
 requires: [XAI_API_KEY, COINGECKO_API_KEY?]   # bare = required · `?` = works better with
 ```
 
-The dashboard surfaces this as an **API keys** panel on each skill (set/unset status, inline "Set" button), a ⚠ flag when an enabled skill is missing a required key, and a **"used by"** index under each key in Settings → Access Keys. Skills can likewise declare MCP servers with an `mcp:` list (`mcp: [base]`) - same two tiers, shown as a per-skill **MCP servers** panel with install state. Convention details: [`examples/skill-templates/TEMPLATE.md`](examples/skill-templates/TEMPLATE.md#declaring-api-keys-requires).
+The dashboard surfaces this as an **API keys** panel on each skill (set/unset status, inline "Set" button), a ⚠ flag when an enabled skill is missing a required key, and a **"used by"** index under each key in Keys → Access Keys. Skills can likewise declare MCP servers with an `mcp:` list (`mcp: [base]`) - same two tiers, shown as a per-skill **MCP servers** panel with install state. Convention details: [`examples/skill-templates/TEMPLATE.md`](examples/skill-templates/TEMPLATE.md#declaring-api-keys-requires).

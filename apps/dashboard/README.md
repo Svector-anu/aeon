@@ -47,7 +47,7 @@ The left sidebar switches between the workspaces; the **Team** roster below the 
 | **Strategy** | Edit `STRATEGY.md` — the north-star goal, priorities, audience, and constraints that ride along with every run. |
 | **Soul** | Manage the optional `soul/` voice files (identity, writing style, examples) so notifications and articles sound like you. After a `strategy-builder` or `soul-builder` run succeeds, the Strategy and Soul editors pull and reload on their own. |
 | **MCP** | Browse featured MCP servers and write `.mcp.json` for one-click install; shows which secret each server needs. |
-| **Settings** | Add and manage credentials (Anthropic / gateway keys, per-skill API keys, notification channel tokens) as GitHub secrets. Skills flag inline when a required key is missing. |
+| **Keys** | Add and manage credentials (Anthropic / gateway keys, per-skill API keys, notification channel tokens) as GitHub secrets. Skills flag inline when a required key is missing. |
 
 On a phone (below 768px) the sidebar and the Feed / Runs / Analytics panel become slide-in drawers opened from a top bar, and Pull / Push move into the sidebar drawer.
 
@@ -59,7 +59,7 @@ The **top bar** carries a harness dropdown that sets which agent CLI runs your s
 
 ## Configuration
 
-Credentials are managed in-app (**Settings** → Add Credential) and stored as GitHub repo secrets, not in a local file — so `.env` is optional. The variables the app itself reads:
+Credentials are managed in-app (**Keys** → Add Credential) and stored as GitHub repo secrets, not in a local file - so `.env` is optional. The variables the app itself reads:
 
 | Variable | Required | Purpose |
 |----------|----------|---------|

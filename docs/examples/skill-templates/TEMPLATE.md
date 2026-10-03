@@ -64,7 +64,7 @@ If a skill calls a third-party API, declare the credentials it reads in the
 `requires:` frontmatter list. This is the single source of truth the dashboard
 reads to show **which skill needs which API key** (a per-skill "API keys"
 section, an inline "key missing" flag in the roster, and a reverse "used by"
-index under each key in Settings → Access Keys).
+index under each key in Keys → Access Keys).
 
 ```yaml
 requires:

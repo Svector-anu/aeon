@@ -36,7 +36,7 @@ The first two are the direct-to-Anthropic options; the rest are gateways. Settin
 
 | Secret | Where to get it |
 |---|---|
-| `CLAUDE_CODE_OAUTH_TOKEN` | Run `claude setup-token` locally → paste the `sk-ant-oat01-…` (valid 1 year). Or use the dashboard's Connect modal (Connect a model), in Aeon Connect (https://www.aeon.fun/connect) or the local `./aeon`. Runs on your Pro/Max subscription, no per-token billing |
+| `CLAUDE_CODE_OAUTH_TOKEN` | Run `claude setup-token` locally → paste the `sk-ant-oat01-…` (valid 1 year). Or press **Connect a model** in the dashboard (Aeon Connect at https://www.aeon.fun/connect, or the local `./aeon`). Runs on your Pro/Max subscription, no per-token billing |
 | `ANTHROPIC_API_KEY` | console.anthropic.com — pay-as-you-go `sk-ant-…`. Also accepts any Anthropic-compatible key for a proxy |
 | `OPENROUTER_API_KEY` | openrouter.ai/keys — `sk-or-…` |
 | `BANKR_LLM_KEY` | bankr.bot/api-keys — `bk_…`, discounted Opus |
@@ -45,7 +45,7 @@ The first two are the direct-to-Anthropic options; the rest are gateways. Settin
 | `SURPLUS_API_KEY` | surplusintelligence.ai — `inf_…`, settles USDC on Base. Fund the wallet and `approve()` once before first use |
 | `HIVEMINDOS_CREDIT_TOKEN` | HivemindOS Models - a credit token billed to a balance, not a provider account. Routed through a local translator sidecar. Not in the dashboard modal yet; set it with `gh secret set` |
 | `XAI_API_KEY` | console.x.ai — `xai-…`. Triple duty: X/tweet skills, the Grok gateway, and API-key auth for the grok harness |
-| `GROK_CREDENTIALS` | Dashboard → Connect modal (Connect a model) → **Connect X account**. Base64 of your `~/.grok` session; runs the grok harness on a SuperGrok / X Premium+ entitlement. No CLI path for this one |
+| `GROK_CREDENTIALS` | Dashboard → **Connect a model** → **Connect X account**. Base64 of your `~/.grok` session; runs the grok harness on a SuperGrok / X Premium+ entitlement. No CLI path for this one |
 
 ## 2. Notification channels — need at least one
 

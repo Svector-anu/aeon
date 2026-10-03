@@ -12,7 +12,7 @@ import type { Secret } from './types'
 // can't provide. Extracted from app/api/secrets/route.ts so the secrets CLI
 // command and the HTTP route share one definition.
 export const BUILTIN_SECRETS: Omit<Secret, 'isSet'>[] = [
-  { name: 'CLAUDE_CODE_OAUTH_TOKEN', group: 'Core', description: 'How Claude Code signs in - option 1 of 2. Runs Aeon on your Claude Pro/Max subscription (no per-token billing). Easiest: click AUTH above; or run claude setup-token locally and paste the token here.', either: 'auth' },
+  { name: 'CLAUDE_CODE_OAUTH_TOKEN', group: 'Core', description: 'How Claude Code signs in - option 1 of 2. Runs Aeon on your Claude Pro/Max subscription (no per-token billing). Easiest: click Connect a model above; or run claude setup-token locally and paste the token here.', either: 'auth' },
   { name: 'GROK_CREDENTIALS', group: 'Core', description: 'Grok Build (grok CLI) X-account OAuth session - base64 of your ~/.grok login, captured by "Connect X account" in AUTH. Lets the grok harness (harness: grok) run in CI on your SuperGrok / X Premium+ entitlement. Alternative: set XAI_API_KEY instead.' },
   { name: 'ANTHROPIC_API_KEY', group: 'Core', description: 'How Claude Code signs in - option 2 of 2. A pay-as-you-go Anthropic API key (sk-ant-...) billed via the Console, or any Anthropic-compatible key for a proxy. Create one at console.anthropic.com.', either: 'auth' },
   { name: 'BANKR_LLM_KEY', group: 'Core', description: 'Bankr Gateway API key (bk_...) - enable at bankr.bot/api-keys' },

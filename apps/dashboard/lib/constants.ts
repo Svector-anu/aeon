@@ -190,7 +190,7 @@ export const CLAUDE_AUTH_SECRETS = ['CLAUDE_CODE_OAUTH_TOKEN', 'ANTHROPIC_API_KE
 
 // Auth secrets that specifically authenticate the GROK harness (X-account OAuth
 // session or an xAI key). A Claude token does NOT authenticate grok, and vice
-// versa — so the top-bar "Auth" CTA and the run-gate must key off the set for the
+// versa - so the top-bar "Connect a model" CTA and the run-gate must key off the set for the
 // SELECTED harness (see authSecretsForHarness), never the union below.
 export const GROK_AUTH_SECRETS = ['GROK_CREDENTIALS', 'XAI_API_KEY']
 

@@ -28,7 +28,7 @@ Other harnesses (--harness grok|codex|kimi|pi|vibe|fx|cursor|hermes):
   aeon auth --harness fx --key <key>              Vercel AI Gateway key for fx
   aeon auth --harness cursor --key <key>          Cursor API key
   aeon auth --harness hermes        Log in with Nous Portal, store as HERMES_AUTH
-  (codex, kimi, pi, vibe and hermes also run on the shared OPENROUTER_API_KEY - set that in Settings.)
+  (codex, kimi, pi, vibe and hermes also run on the shared OPENROUTER_API_KEY - set that in the dashboard's Keys.)
 
 Options:
   --harness <h>       claude-code | grok | codex | kimi | pi | vibe | fx | cursor | hermes (omit for claude-code)

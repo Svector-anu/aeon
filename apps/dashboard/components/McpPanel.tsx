@@ -224,8 +224,8 @@ export function McpPanel({ servers, loading, saving, secrets, busy, onSave, onSe
             <p className="text-[10px] font-mono uppercase tracking-[0.14em] text-aeon-red mb-1.5">⚠ OAuth MCP servers won&apos;t keep working without a secrets PAT</p>
             <p className="text-[11px] text-primary-40 leading-relaxed">
               Providers rotate their refresh token on every run, and the runner needs a secrets-write credential to save each rotation — without it a Connected server works once, then its auth breaks. To set it up: create a fine-grained PAT at <a href="https://github.com/settings/personal-access-tokens" target="_blank" rel="noopener noreferrer" className="text-primary-70 underline decoration-dotted underline-offset-2 hover:text-aeon-fg transition-colors">github.com/settings/personal-access-tokens</a>, add this repo under <span className="text-primary-70">Repository access</span>, grant <span className="text-primary-70">Secrets: Read and write</span>, and save it as{' '}
-              <button onClick={() => onGoToSecret('GH_SECRETS_PAT')} title="Open in Settings to set this key" className="text-aeon-red-alert underline decoration-dotted underline-offset-2 hover:text-aeon-fg transition-colors">GH_SECRETS_PAT</button>
-              {' '}in Settings. Already Connected a server? Re-connect it once after adding the PAT.
+              <button onClick={() => onGoToSecret('GH_SECRETS_PAT')} title="Open in Keys to set this key" className="text-aeon-red-alert underline decoration-dotted underline-offset-2 hover:text-aeon-fg transition-colors">GH_SECRETS_PAT</button>
+              {' '}in Keys. Already Connected a server? Re-connect it once after adding the PAT.
             </p>
           </div>
         )}

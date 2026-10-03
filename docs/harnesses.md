@@ -86,7 +86,7 @@ selected provider; the CLI + dashboard flows share `lib/harness-auth-server.ts`.
 
 Generated from the credential manifest ([`harness-adapter/harnesses.json`](../harness-adapter/harnesses.json),
 `credentials` + `default_model`), which CI holds to `scripts/resolve-harness.sh`. Each harness
-uses the **first** secret in its list that is set; set any one. The Connect modal (Connect a model) in [Aeon Connect](https://www.aeon.fun/connect)
+uses the **first** secret in its list that is set; set any one. **Connect a model** in [Aeon Connect](https://www.aeon.fun/connect)
 or the local dashboard, and `./aeon init`, walk you through the same list; `bin/onboard` checks it.
 
 | harness | precedence (first set wins) | default model |

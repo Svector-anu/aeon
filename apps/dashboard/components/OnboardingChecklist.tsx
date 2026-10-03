@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { harnessName } from '../lib/connect-detect'
 
 // Setup checklist on HQ, shown until every row is done. Each row has one
@@ -13,13 +14,26 @@ export interface ChecklistState {
   actionsEnabled: boolean | null
   harness: string
   hasModelKey: boolean
+  // A skill is turned on in aeon.yml beyond the default heartbeat.
+  skillsPicked: boolean
   notificationsSet: boolean
   firstRunDone: boolean
 }
 
+// The channels ./notify can deliver to; the row's chooser opens the first
+// secret each one needs.
+export type NotifyChannel = 'telegram' | 'discord' | 'slack' | 'email'
+const CHANNELS: { id: NotifyChannel; label: string }[] = [
+  { id: 'telegram', label: 'Telegram' },
+  { id: 'discord', label: 'Discord' },
+  { id: 'slack', label: 'Slack' },
+  { id: 'email', label: 'Email' },
+]
+
 interface OnboardingChecklistProps extends ChecklistState {
   onConnect: () => void
-  onNotifications: () => void
+  onPickSkills: () => void
+  onNotifications: (channel: NotifyChannel) => void
   onFirstRun: () => void
 }
 
@@ -33,11 +47,13 @@ function Dot({ state }: { state: RowState }) {
 }
 
 export function checklistComplete(s: ChecklistState): boolean {
-  return Boolean(s.repo) && s.actionsEnabled !== false && s.hasModelKey && s.notificationsSet && s.firstRunDone
+  return Boolean(s.repo) && s.actionsEnabled !== false && s.hasModelKey && s.skillsPicked && s.notificationsSet && s.firstRunDone
 }
 
 export function OnboardingChecklist(props: OnboardingChecklistProps) {
-  const { repo, actionsEnabled, harness, hasModelKey, notificationsSet, firstRunDone } = props
+  const { repo, actionsEnabled, harness, hasModelKey, skillsPicked, notificationsSet, firstRunDone } = props
+  // Notifications row: "Set up" swaps the action for a pick-a-channel row.
+  const [choosing, setChoosing] = useState(false)
   if (checklistComplete(props)) return null
 
   const rows: { label: string; state: RowState; detail: string; action?: { label: string; onClick?: () => void; href?: string } }[] = [
@@ -51,14 +67,20 @@ export function OnboardingChecklist(props: OnboardingChecklistProps) {
     {
       label: 'Model connected',
       state: hasModelKey ? 'done' : 'todo',
-      detail: hasModelKey ? 'Key saved. The next run uses it.' : `No model key for the ${harnessName(harness)} harness yet.`,
-      action: hasModelKey ? undefined : { label: 'Connect', onClick: props.onConnect },
+      detail: hasModelKey ? 'Key saved. The next run uses it.' : `No model connected for ${harnessName(harness)} yet.`,
+      action: hasModelKey ? undefined : { label: 'Connect a model', onClick: props.onConnect },
+    },
+    {
+      label: 'Skills picked',
+      state: skillsPicked ? 'done' : 'todo',
+      detail: skillsPicked ? 'Your agent has work to do.' : 'Turn on the skills you want from the packs.',
+      action: skillsPicked ? undefined : { label: 'Pick skills', onClick: props.onPickSkills },
     },
     {
       label: 'Notifications set up',
       state: notificationsSet ? 'done' : 'todo',
       detail: notificationsSet ? 'Results reach you.' : 'Telegram, Discord, Slack, or email.',
-      action: notificationsSet ? undefined : { label: 'Set up', onClick: props.onNotifications },
+      action: notificationsSet || choosing ? undefined : { label: 'Set up', onClick: () => setChoosing(true) },
     },
     {
       label: 'First skill run',
@@ -87,6 +109,13 @@ export function OnboardingChecklist(props: OnboardingChecklistProps) {
             {r.action && (r.action.href
               ? <a href={r.action.href} target="_blank" rel="noopener noreferrer" className="btn-mini shrink-0">{r.action.label}</a>
               : <button onClick={r.action.onClick} className="btn-mini-go shrink-0">{r.action.label}</button>)}
+            {r.label === 'Notifications set up' && !notificationsSet && choosing && (
+              <div className="flex flex-wrap justify-end gap-1.5 shrink-0" role="group" aria-label="Pick a channel">
+                {CHANNELS.map((c) => (
+                  <button key={c.id} onClick={() => props.onNotifications(c.id)} className="btn-mini-go">{c.label}</button>
+                ))}
+              </div>
+            )}
           </li>
         ))}
       </ul>
