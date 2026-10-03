@@ -9,7 +9,7 @@
       "124": "timeout"
     }
   },
-  "generated": "2026-10-02T20:04:17Z",
+  "generated": "2026-10-03T15:34:33Z",
   "count": 9,
   "harnesses": [
     {
@@ -403,7 +403,7 @@
       "mcp": "native",
       "max_turns": "timeout",
       "claude_md": "native",
-      "default_model": "deepseek/deepseek-v4-flash",
+      "default_model": "deepseek/deepseek-v4.1-flash",
       "credentials": [
         {
           "secret": "ANTHROPIC_API_KEY",

@@ -36,13 +36,15 @@ vibe, kimi and hermes at once (and, as a gateway, for claude). Their model picke
 these harnesses carries its own curated list (`CODEX_MODELS` /
 `VIBE_MODELS` / `PI_MODELS` / `KIMI_MODELS`): **codex**
 defaults to `openai/gpt-6-luna` (newer and cheaper than the prior default) and also
-offers `gpt-6-sol` and `gpt-6.1-sol` for quality, plus the older
+offers `gpt-6.1-sol` for quality (older pins like `gpt-6-sol`,
 `gpt-5.1-codex-mini`, `gpt-5-mini`, `gpt-5.3-codex`, and the `gpt-5.6` family
-(`luna`, `terra`); it fails on `gpt-5-nano`; **vibe**'s generic `ProviderConfig` drives any
+still dispatch); it fails on `gpt-5-nano`; **vibe**'s generic `ProviderConfig` drives any
 OpenRouter model, so it defaults to `mistralai/mistral-medium-3-5` and offers
-`deepseek/deepseek-v4-flash`; **pi** (litellm `openrouter/<slug>` routing) runs the
-DeepSeek V4 pair: `deepseek-v4-flash` (default) and `deepseek-v4-pro`, plus
-`deepseek-v4.1-flash`; **kimi** is Moonshot, so it runs Moonshot's own Kimi family
+`deepseek/deepseek-v4.1-flash`; **pi** (litellm `openrouter/<slug>` routing) runs the
+two models DeepSeek's own API serves: `deepseek-v4.1-flash` (default) and
+`deepseek-v4-pro` (older `deepseek-v4-flash` pins still dispatch); **hermes** runs
+its configured `default`, or `anthropic/claude-sonnet-5.5` / `openai/gpt-6.1-sol` as
+overrides; **kimi** is Moonshot, so it runs Moonshot's own Kimi family
 through OpenRouter: `moonshotai/kimi-k2.6` (default), `kimi-k3` (strongest, ~2×
 slower), `kimi-k2.7-code`, and the older `kimi-k2.5`. The scorer
 routes through the same harness the skill

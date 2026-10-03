@@ -120,7 +120,7 @@ mkfixture codex
 [ "$(get MODEL_ARG)" = "openai/gpt-6-luna" ] \
   && pass "codex: MODEL_ARG is a bare OpenRouter id" || bad "codex MODEL_ARG"
 mkfixture pi
-[ "$(get MODEL_ARG)" = "openrouter/deepseek/deepseek-v4-flash" ] \
+[ "$(get MODEL_ARG)" = "openrouter/deepseek/deepseek-v4.1-flash" ] \
   && pass "pi: MODEL_ARG carries the openrouter/ prefix" || bad "pi MODEL_ARG (got '$(get MODEL_ARG)')"
 for h in vibe kimi; do
   mkfixture "$h"

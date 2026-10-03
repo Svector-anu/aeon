@@ -42,7 +42,7 @@
 #   "mcp": "native",
 #   "max_turns": "timeout",
 #   "claude_md": "native",
-#   "default_model": "deepseek/deepseek-v4-flash",
+#   "default_model": "deepseek/deepseek-v4.1-flash",
 #   "credentials": [
 #     { "secret": "ANTHROPIC_API_KEY", "kind": "api_key", "auth_mode": "native-key", "label": "Anthropic API key", "prefix": "sk-ant-api", "get_url": "https://console.anthropic.com/settings/keys", "aeon_cmd": "./aeon auth --harness pi --key <sk-ant-api...>" },
 #     { "secret": "ANTHROPIC_OAUTH_TOKEN", "kind": "oauth_token", "auth_mode": "native-key", "label": "Claude subscription token", "prefix": "sk-ant-oat", "get_url": "https://claude.ai", "login_cmd": "claude setup-token", "aeon_cmd": "./aeon auth --harness pi --key <sk-ant-oat...>", "expires": "about 1 year (claude setup-token mints a long-lived token)" },

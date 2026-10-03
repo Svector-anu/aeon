@@ -21,11 +21,14 @@ on:
         # scripts/tests/test_dashboard_model_choices.sh enforces it.
         # Each harness runs its own native family: codex uses openai/* ids; kimi
         # moonshotai/*; vibe mistralai/mistral-medium-3-5 (default) + deepseek/
-        # deepseek-v4-flash; pi deepseek/deepseek-v4-flash (default) + deepseek-v4-pro
-        # + deepseek-v4.1-flash; cursor its own ids (`auto` default; `gpt-5.1` is the
-        # retired default, kept so existing configs still dispatch); hermes `default` (its configured provider) or an
-        # OpenRouter-style override. "Resolve harness" forwards them verbatim as the
-        # harness model (`default` means no override).
+        # deepseek-v4.1-flash; pi deepseek/deepseek-v4.1-flash (default) +
+        # deepseek-v4-pro; cursor its own ids (`auto` default); hermes `default`
+        # (its configured provider) or an OpenRouter-style override
+        # (anthropic/claude-sonnet-5.5, openai/gpt-6.1-sol). Ids no longer offered by
+        # any picker (e.g. `gpt-5.1`, deepseek-v4-flash, claude-sonnet-4.6, gpt-5.4,
+        # gemini-2.5-pro) stay here so existing configs still dispatch. "Resolve
+        # harness" forwards them verbatim as the harness model (`default` means no
+        # override).
         options:
           - '(config default)'
           - claude-sonnet-5-5
