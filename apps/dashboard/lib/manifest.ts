@@ -57,9 +57,3 @@ export function harnessManifest(id: string): ManifestHarness | undefined {
 export function credentialsFor(id: string): ManifestCredential[] {
   return harnessManifest(id)?.credentials ?? []
 }
-
-// Whether a run's "Token usage" line can be trusted for this harness. An
-// unknown harness is assumed to report (the stricter check).
-export function reportsTokenUsage(id: string): boolean {
-  return (harnessManifest(id)?.token_usage ?? 'full') !== 'none'
-}

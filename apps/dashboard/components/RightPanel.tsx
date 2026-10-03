@@ -6,6 +6,7 @@ import type { RunLogs } from '../lib/runs'
 import { timeAgo, runStatusColor, runStatusGlyph } from '../lib/utils'
 import { SpecNode } from './SpecNode'
 import { PanelError } from './PanelError'
+import { RunDiagnosis } from './RunDiagnosis'
 import { useNarrow } from '../lib/use-narrow'
 
 // The Activity and Runs tabs render the same row; only their empty-state copy differs.
@@ -32,9 +33,11 @@ interface RightPanelProps {
   onCloseDrawer?: () => void
   onRefresh: () => void
   onFetchAnalytics: () => void
+  // A failed run's "Connect" (its credential was the problem).
+  onConnect?: (harness?: string) => void
 }
 
-export function RightPanel({ runs, outputs, feedLoading, feedError, analyticsData, analyticsError, drawerOpen, onCloseDrawer, onRefresh, onFetchAnalytics }: RightPanelProps) {
+export function RightPanel({ runs, outputs, feedLoading, feedError, analyticsData, analyticsError, drawerOpen, onCloseDrawer, onRefresh, onFetchAnalytics, onConnect }: RightPanelProps) {
   const [rightTab, setRightTab] = useState<'feed' | 'runs' | 'analytics'>('feed')
   const [selectedRun, setSelectedRun] = useState<Run | null>(null)
   const [runLogs, setRunLogs] = useState('')
@@ -139,6 +142,7 @@ export function RightPanel({ runs, outputs, feedLoading, feedError, analyticsDat
                 <a href={selectedRun.url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-primary-40 font-mono border border-[rgba(250,250,250,0.10)] px-2 py-0.5 hover:border-aeon-red hover:text-aeon-red transition-colors">GitHub</a>
               </div>
               <div className="flex-1 overflow-y-auto p-3">
+                <RunDiagnosis run={selectedRun} onConnect={onConnect} className="mb-3 pb-3 border-b border-[rgba(250,250,250,0.10)]" />
                 {logsLoading ? <div className="flex justify-center py-8"><div className="w-2 h-2 rounded-full bg-aeon-red animate-pulse" /></div> : (
                   <div className="space-y-3">
                     {runSummary ? (

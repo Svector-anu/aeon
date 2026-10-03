@@ -6,13 +6,12 @@ import { postJson } from '../lib/api-client'
 import type { Harness } from '../lib/types'
 import { detectPaste, providersForHarness, acceptsOpenRouter, harnessName, type Detection } from '../lib/connect-detect'
 import { guideFor, captureCommand, canDriveLogin, type Os } from '../lib/connect-commands'
-import type { CheckResult } from '../lib/connect-check'
 
 // One modal to connect any harness to a model, command first:
 //   Step 1  run this on your computer (copy button), or get a key
 //   Step 2  paste the result into ONE box; we show what it is before saving
-// then a live "Test connection" run proves the credential works on GitHub.
-// Options under that: one-click OpenRouter (any harness that takes
+// There is no test run: the next skill run uses the credential, and a failed
+// run says why on HQ (lib/run-diagnosis.ts). Options under that: one-click OpenRouter (any harness that takes
 // OPENROUTER_API_KEY), and, only when the dashboard runs locally, "Do it for
 // me" (drives the CLI login here) and "Found on this machine".
 
@@ -22,15 +21,9 @@ interface ConnectModalProps {
   harness: Harness
   // GH_SECRETS_PAT / GH_GLOBAL set: grok's X-account session can persist rotations.
   patSet: boolean
-  // Open straight on the test panel (the checklist's "Test" action).
-  startWithTest?: boolean
   onClose: () => void
-  // Saved: the page records it and starts the live test for c.harness ?? harness.
+  // Saved: the page records it (and the harness, when a login capture switched it).
   onSaved: (c: SavedCredential) => void
-  // Latest connect-check result per harness, owned by the page.
-  checks: Record<string, CheckResult>
-  onTestAgain: (harness: Harness) => void
-  onRemoveSecret: (name: string) => Promise<boolean>
   onGoToSecret: (name: string) => void
 }
 
@@ -75,65 +68,28 @@ function DetectionLine({ d }: { d: Detection }) {
   )
 }
 
-// The live check's result. The page dispatches and polls (lib/use-connect-checks.ts)
-// so the run keeps being followed after this modal closes.
-function TestPanel({ result, onTestAgain, onRemoveSecret, onRetryConnect, onClose }: {
-  result: CheckResult | undefined
-  onTestAgain: () => void
-  onRemoveSecret: (name: string) => Promise<boolean>
-  onRetryConnect: () => void
-  onClose: () => void
-}) {
-  const [fixing, setFixing] = useState(false)
-  const [fixed, setFixed] = useState('')
-  const state = result?.state ?? 'queued'
-  const done = state === 'pass' || state === 'fail' || state === 'none'
-  const applyFix = async () => {
-    if (!result?.fix) return
-    setFixing(true)
-    try { if (await onRemoveSecret(result.fix.secret)) setFixed(result.fix.secret) } finally { setFixing(false) }
-  }
+// What was saved. No test run follows: the next skill run uses it.
+function SavedPanel({ saved, harness, onClose }: { saved: SavedCredential; harness: Harness; onClose: () => void }) {
   return (
     <div>
-      <p className={stepCls}>Test connection</p>
+      <p className={stepCls}>Saved</p>
       <div className={`${panelCls} flex items-start gap-3`}>
-        <span className={`mt-1 w-2.5 h-2.5 rounded-full shrink-0 ${state === 'pass' ? 'bg-aeon-green' : state === 'fail' ? 'bg-aeon-red-alert' : state === 'none' ? 'bg-[rgba(250,250,250,0.25)]' : 'bg-aeon-red animate-pulse'}`} />
+        <svg viewBox="0 0 16 16" className="mt-0.5 w-4 h-4 text-aeon-green shrink-0" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><path d="M3 8.5l3 3 7-7" /></svg>
         <div className="min-w-0 text-[11px] font-mono leading-relaxed">
-          <div className="text-aeon-fg">
-            {state === 'pass' ? 'Connected. The model answered from a GitHub runner.'
-              : state === 'fail' ? (result?.reason || 'The test failed.')
-              : state === 'none' ? 'Not tested yet.'
-              : state === 'running' ? 'Running a tiny test skill on GitHub...'
-              : 'Starting a test run on GitHub...'}
-          </div>
-          {state === 'pass' && result?.usage && result.usage.total > 0 && <div className="text-primary-40">{result.usage.total} tokens used.</div>}
-          {state === 'fail' && result?.hint && !fixed && <div className="text-aeon-red mt-1">Next step: {result.hint}</div>}
-          {state === 'fail' && result?.fix && !fixed && (
-            <button onClick={applyFix} disabled={fixing} className="btn-mini-danger mt-2">{fixing ? '...' : result.fix.label}</button>
-          )}
-          {fixed && <div className="text-aeon-green mt-1">Removed {fixed}. Test again to confirm the next key works.</div>}
-          {!done && <div className="text-primary-40">Usually 1 to 3 minutes. You can close this; HQ keeps following the run.</div>}
-          {result?.runUrl && <a href={result.runUrl} target="_blank" rel="noopener noreferrer" className="inline-block mt-1 text-primary-50 underline decoration-dotted underline-offset-2 hover:text-aeon-fg">Open the run on GitHub</a>}
+          <div className="text-aeon-fg">Saved {saved.secret || saved.label || 'the credential'}. The next run uses it.</div>
+          {saved.harness && saved.harness !== harness && <div className="text-primary-40">Saving also selected the {harnessName(saved.harness)} harness.</div>}
+          <div className="text-primary-40">If a run fails, HQ says why and what to do next.</div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-2 mt-[var(--space-md)]">
-        {state === 'pass'
-          ? <button onClick={onClose} className="col-span-2 bg-aeon-fg text-aeon-bg text-sm py-3 font-mono uppercase tracking-[2px] hover:opacity-90">Done</button>
-          : <>
-              <button onClick={() => { setFixed(''); onTestAgain() }} disabled={!done} className={secondaryBtn}>{state === 'none' ? 'Test now' : 'Test again'}</button>
-              <button onClick={onRetryConnect} className={secondaryBtn}>Try another way</button>
-            </>}
-      </div>
+      <button onClick={onClose} className={`${primaryBtn} mt-[var(--space-md)]`}>Done</button>
     </div>
   )
 }
 
-export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved, checks, onTestAgain, onRemoveSecret, onGoToSecret }: ConnectModalProps) {
+export function ConnectModal({ harness, patSet, onClose, onSaved, onGoToSecret }: ConnectModalProps) {
   const guide = guideFor(harness)
-  const [view, setView] = useState<'connect' | 'test'>(startWithTest ? 'test' : 'connect')
-  // A pasted login capture can belong to another harness (and switches to it),
-  // so the test runs on whatever was actually connected.
-  const [testHarness, setTestHarness] = useState<Harness>(harness)
+  // Set once a credential is saved; the modal then shows what was saved.
+  const [saved, setSaved] = useState<SavedCredential | null>(null)
   const [os, setOs] = useState<Os>(() => typeof navigator !== 'undefined' && !/Mac|iPhone|iPad/.test(navigator.userAgent) ? 'linux' : 'mac')
   const [value, setValue] = useState('')
   const [provider, setProvider] = useState('')
@@ -177,11 +133,10 @@ export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved,
   const detection = localDetection.state === 'pending' && serverDetection?.key === detectKey ? serverDetection.d : localDetection
   const providerOptions = providersForHarness(harness)
 
-  const saved = (c: SavedCredential) => {
+  const done = (c: SavedCredential) => {
     onSaved(c)
-    setTestHarness(c.harness ?? harness)
     setValue(''); setProvider(''); setError('')
-    setView('test')
+    setSaved(c)
   }
 
   const save = async () => {
@@ -189,7 +144,7 @@ export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved,
     setBusy('save'); setError('')
     try {
       const { ok, data } = await postJson<SavedCredential & { error?: string }>('/api/connect', { harness, value, provider })
-      if (ok) saved(data)
+      if (ok) done(data)
       else setError(data.error || 'Save failed')
     } finally { setBusy('') }
   }
@@ -200,7 +155,7 @@ export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved,
     try {
       const [url, body] = harness === 'claude' ? ['/api/auth', {}] : harness === 'grok' ? ['/api/grok-auth', {}] : ['/api/harness-auth', { harness }]
       const { ok, data } = await postJson<SavedCredential & { error?: string }>(url, body)
-      if (ok) saved({ secret: data.secret || '', harness: data.harness, synced: data.synced })
+      if (ok) done({ secret: data.secret || '', harness: data.harness, synced: data.synced })
       else setError(data.error || 'Login failed')
     } finally { setBusy('') }
   }
@@ -209,7 +164,7 @@ export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved,
     setBusy(id); setError('')
     try {
       const { ok, data } = await postJson<SavedCredential & { error?: string }>('/api/connect/found', { id, harness })
-      if (ok) saved(data)
+      if (ok) done(data)
       else setError(data.error || 'Could not use it')
     } finally { setBusy('') }
   }
@@ -238,7 +193,7 @@ export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved,
       stop()
       if (!mounted.current) return
       setBusy('')
-      if (status === 'done') saved({ secret: 'OPENROUTER_API_KEY', label: 'OpenRouter key' })
+      if (status === 'done') done({ secret: 'OPENROUTER_API_KEY', label: 'OpenRouter key' })
       else setError(err || 'OpenRouter connect failed')
     }
     const check = async () => {
@@ -272,12 +227,12 @@ export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved,
           <button onClick={onClose} aria-label="Close" className="text-primary-35 hover:text-primary-100 text-lg">&times;</button>
         </div>
 
-        {view === 'test' ? (
-          <TestPanel result={checks[testHarness]} onTestAgain={() => onTestAgain(testHarness)} onRemoveSecret={onRemoveSecret} onRetryConnect={() => setView('connect')} onClose={onClose} />
+        {saved ? (
+          <SavedPanel saved={saved} harness={harness} onClose={onClose} />
         ) : (
           <>
             <p className="text-xs text-primary-50 font-mono mb-[var(--space-md)]">
-              Give Aeon a model to run on. It is saved as an encrypted GitHub secret, then tested with a tiny run.
+              Give Aeon a model to run on. It is saved as an encrypted GitHub secret, and the next run uses it.
             </p>
 
             {/* Step 1 */}
@@ -331,7 +286,7 @@ export function ConnectModal({ harness, patSet, startWithTest, onClose, onSaved,
               <button onClick={() => setShowProvider(true)} className="mt-1 text-[10px] font-mono text-primary-40 hover:text-aeon-fg">Wrong provider? Pick it</button>
             ) : null}
             {harness === 'claude' && (
-              <p className="text-[10px] text-primary-40 font-mono mt-2 leading-relaxed">GitHub servers sometimes reject Claude subscription tokens. The test after saving will tell you; an API key or OpenRouter always works.</p>
+              <p className="text-[10px] text-primary-40 font-mono mt-2 leading-relaxed">GitHub servers sometimes reject Claude subscription tokens. If runs fail or show zero token usage, use an API key or OpenRouter instead.</p>
             )}
             {harness === 'grok' && !patSet && (
               <p className="text-[10px] text-primary-40 font-mono mt-2 leading-relaxed">

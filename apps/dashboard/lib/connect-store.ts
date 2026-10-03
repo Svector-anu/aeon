@@ -1,7 +1,7 @@
 // Short-lived server-side state for the connect flows: OpenRouter PKCE
-// verifiers (bound to a `state`), Telegram link nonces, and connect-check
-// dispatch ids. Everything here expires within minutes and is safe to lose on a
-// restart (the operator just clicks again).
+// verifiers (bound to a `state`), Telegram link nonces, and cached failed-run
+// diagnoses. Everything here expires within a day and is safe to lose on a
+// restart (the operator just clicks again, or the run log is read again).
 //
 // The local dashboard is one Node process, so an in-memory map is enough. The
 // hosted fork (aeon-connect) runs serverless with Upstash Redis, so callers only

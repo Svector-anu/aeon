@@ -5,6 +5,7 @@ import { packGroups } from '../lib/constants'
 import { timeAgo, runStatusColor, runStatusGlyph } from '../lib/utils'
 import { Scramble, Flip, VelocityMarquee } from './ui/Animated'
 import { Section } from './ui/Section'
+import { RunDiagnosis } from './RunDiagnosis'
 
 interface HQOverviewProps {
   skills: Skill[]
@@ -16,9 +17,11 @@ interface HQOverviewProps {
   onOpenPacks: () => void
   // Setup checklist card, rendered above everything until setup is complete.
   checklist?: React.ReactNode
+  // A failed run's "Connect" (its credential was the problem).
+  onConnect?: (harness?: string) => void
 }
 
-export function HQOverview({ skills, runs, enabledCount, workingCount, categoryFilter, onCategoryClick, onOpenPacks, checklist }: HQOverviewProps) {
+export function HQOverview({ skills, runs, enabledCount, workingCount, categoryFilter, onCategoryClick, onOpenPacks, checklist, onConnect }: HQOverviewProps) {
   const onMove = (e: React.MouseEvent<HTMLUListElement>) => {
     const card = (e.target as HTMLElement).closest('li')
     if (!card) return
@@ -125,13 +128,14 @@ export function HQOverview({ skills, runs, enabledCount, workingCount, categoryF
       <Section label="Recent activity">
         <div className="border border-[rgba(250,250,250,0.10)] divide-y divide-[rgba(250,250,250,0.08)]">
           {runs.slice(0, 8).map(run => (
-            <div
-              key={run.id}
-              className="w-full flex items-center gap-4 px-5 py-3 text-left group"
-            >
-              <span className={`text-sm w-4 shrink-0 ${runStatusColor(run)}`}>{runStatusGlyph(run)}</span>
-              <span className="text-xs text-primary-70 truncate flex-1 font-mono">{run.workflow}</span>
-              <span className="text-[10px] text-primary-35 font-mono tabular-nums uppercase tracking-[0.14em]">{timeAgo(run.created_at)}</span>
+            <div key={run.id} className="px-5 py-3 group">
+              <div className="w-full flex items-center gap-4 text-left">
+                <span className={`text-sm w-4 shrink-0 ${runStatusColor(run)}`}>{runStatusGlyph(run)}</span>
+                <span className="text-xs text-primary-70 truncate flex-1 font-mono">{run.workflow}</span>
+                <span className="text-[10px] text-primary-35 font-mono tabular-nums uppercase tracking-[0.14em]">{timeAgo(run.created_at)}</span>
+              </div>
+              {/* Failed runs only: why, and the next step (log read lazily). */}
+              <RunDiagnosis run={run} onConnect={onConnect} className="mt-1 pl-8" />
             </div>
           ))}
           {!runs.length && (

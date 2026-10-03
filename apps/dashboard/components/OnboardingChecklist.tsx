@@ -1,12 +1,11 @@
 'use client'
 
-import type { CheckResult } from '../lib/connect-check'
 import { harnessName } from '../lib/connect-detect'
 
 // Setup checklist on HQ, shown until every row is done. Each row has one
-// action that opens the flow that completes it. "Model" only counts once the
-// connect-check run proved the credential works from GitHub, not merely when a
-// secret exists.
+// action that opens the flow that completes it. "Model" is done once a
+// credential for the selected harness is saved; the first run uses it, and a
+// failed run explains itself under Recent activity.
 
 export interface ChecklistState {
   repo: string
@@ -14,44 +13,32 @@ export interface ChecklistState {
   actionsEnabled: boolean | null
   harness: string
   hasModelKey: boolean
-  check: CheckResult | null
   notificationsSet: boolean
   firstRunDone: boolean
 }
 
 interface OnboardingChecklistProps extends ChecklistState {
   onConnect: () => void
-  onTest: () => void
-  // Open the failed test's details (reason, next step, one-click fix).
-  onFix: () => void
   onNotifications: () => void
   onFirstRun: () => void
 }
 
-type RowState = 'done' | 'todo' | 'busy' | 'unknown'
+type RowState = 'done' | 'todo' | 'unknown'
 
 function Dot({ state }: { state: RowState }) {
   if (state === 'done') {
     return <svg viewBox="0 0 16 16" className="w-4 h-4 text-aeon-green shrink-0" fill="none" stroke="currentColor" strokeWidth="2" aria-label="done"><path d="M3 8.5l3 3 7-7" /></svg>
   }
-  return <span aria-label={state} className={`w-2.5 h-2.5 mx-[3px] rounded-full shrink-0 ${state === 'busy' ? 'bg-aeon-red animate-pulse' : state === 'unknown' ? 'bg-[rgba(250,250,250,0.25)]' : 'border border-aeon-red'}`} />
+  return <span aria-label={state} className={`w-2.5 h-2.5 mx-[3px] rounded-full shrink-0 ${state === 'unknown' ? 'bg-[rgba(250,250,250,0.25)]' : 'border border-aeon-red'}`} />
 }
 
 export function checklistComplete(s: ChecklistState): boolean {
-  return Boolean(s.repo) && s.actionsEnabled !== false && s.hasModelKey && s.check?.state === 'pass' && s.notificationsSet && s.firstRunDone
+  return Boolean(s.repo) && s.actionsEnabled !== false && s.hasModelKey && s.notificationsSet && s.firstRunDone
 }
 
 export function OnboardingChecklist(props: OnboardingChecklistProps) {
-  const { repo, actionsEnabled, harness, hasModelKey, check, notificationsSet, firstRunDone } = props
+  const { repo, actionsEnabled, harness, hasModelKey, notificationsSet, firstRunDone } = props
   if (checklistComplete(props)) return null
-
-  const testing = check?.state === 'queued' || check?.state === 'running'
-  const modelState: RowState = hasModelKey && check?.state === 'pass' ? 'done' : testing ? 'busy' : 'todo'
-  const modelDetail = !hasModelKey ? `No model key for the ${harnessName(harness)} harness yet.`
-    : check?.state === 'pass' ? 'Verified from a GitHub runner.'
-    : testing ? 'Test run in progress...'
-    : check?.state === 'fail' ? `${check.reason ?? 'Last test failed.'} ${check.hint ?? ''}`
-    : 'Key saved, not tested on GitHub yet.'
 
   const rows: { label: string; state: RowState; detail: string; action?: { label: string; onClick?: () => void; href?: string } }[] = [
     { label: 'Repo connected', state: repo ? 'done' : 'todo', detail: repo || 'The dashboard could not find your repo. Run gh auth login, then reload.' },
@@ -62,13 +49,10 @@ export function OnboardingChecklist(props: OnboardingChecklistProps) {
       action: actionsEnabled === true || !repo ? undefined : { label: 'Open Actions', href: `https://github.com/${repo}/actions` },
     },
     {
-      label: 'Model connected and verified',
-      state: modelState,
-      detail: modelDetail,
-      action: !hasModelKey ? { label: 'Connect', onClick: props.onConnect }
-        : check?.state === 'pass' || testing ? undefined
-        : check?.state === 'fail' ? { label: 'Fix', onClick: props.onFix }
-        : { label: 'Test connection', onClick: props.onTest },
+      label: 'Model connected',
+      state: hasModelKey ? 'done' : 'todo',
+      detail: hasModelKey ? 'Key saved. The next run uses it.' : `No model key for the ${harnessName(harness)} harness yet.`,
+      action: hasModelKey ? undefined : { label: 'Connect', onClick: props.onConnect },
     },
     {
       label: 'Notifications set up',
