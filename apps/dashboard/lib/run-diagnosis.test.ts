@@ -60,7 +60,9 @@ describe('run diagnosis on the real gh log shape (UNKNOWN STEP)', () => {
   it('a run that failed before the model call reads the error annotation', () => {
     const out = extractRunOutput(failedEarly)
     assert.equal(out.reachedModel, false)
-    assert.equal(out.run, '')
+    // No usage notice: the slice ends at the first ##[error] instead.
+    assert.match(out.run, /##\[error\]The process git failed with exit code 128$/)
+    assert.doesNotMatch(out.run, /##\[group\]/)
     assert.match(out.problems, /exit code 128/)
     const d = diagnoseRun({ conclusion: 'failure', log: failedEarly })
     assert.equal(d?.reason, 'The run failed.')
@@ -70,6 +72,49 @@ describe('run diagnosis on the real gh log shape (UNKNOWN STEP)', () => {
   it('works on a logs zip without job/step columns too', () => {
     const zipText = REAL.split('\n').map((l) => l.split('\t').slice(2).join('\t')).join('\n')
     assert.equal(parseUsage(extractRunOutput(zipText).run)?.input, 2936)
+  })
+})
+
+// --- a real revoked Codex login ------------------------------------------------------
+// Trimmed from aaronjmars/aeon-oneshot-test run 37131474562 (gh run view --log):
+// the ChatGPT login was revoked, codex died before the usage notice, and the
+// ##[error] annotation itself only says "unauthorized (401)". Request ids and
+// cf-ray dropped; the gh shape (run / UNKNOWN STEP / timestamp) kept.
+const REVOKED = [
+  '##[group]Run set -euo pipefail',
+  'echo "Using harness: $HARNESS  |  model: $BANNER_MODEL"',
+  'echo "::notice::Token usage - model: ${EFFECTIVE_MODEL:-$BANNER_MODEL}, input: $INPUT_TOKENS, output: $OUTPUT_TOKENS"',
+  '##[endgroup]',
+  'Using harness: codex  |  model: gpt-6-luna',
+  'Capability mode: read-only',
+  '##[notice]effective model for codex: gpt-6-luna',
+  'read-only: workspace write-locked via bwrap',
+  '2026-10-03T14:57:33.388315Z ERROR codex_models_manager::manager: failed to refresh available models: unexpected status 401 Unauthorized: Encountered invalidated oauth token for user, failing request, url: https://chatgpt.com/backend-api/codex/models?client_version=0.159.3, auth error: 401, auth error code: token_revoked',
+  '2026-10-03T14:57:33.515361Z ERROR rmcp::transport::worker: worker quit with fatal: Transport channel closed, when UnexpectedServerResponse("HTTP 401: {\\n  \\"error\\": {\\n    \\"message\\": \\"Encountered invalidated oauth token for user, failing request\\",\\n    \\"code\\": \\"token_revoked\\"\\n  },\\n  \\"status\\": 401\\n}")',
+  'codex exited 1: {"type":"turn.started"} {"type":"error","message":"Reconnecting... 2/5 (workspace routing discovery unauthorized (401))"} {"type":"turn.failed","error":{"message":"workspace routing discovery unauthorized (401)"}}',
+  '##[error]run-harness codex failed: {"type":"error","message":"workspace routing discovery unauthorized (401)"} {"type":"turn.failed","error":{"message":"workspace routing discovery unauthorized (401)"}}',
+  '##[error]Process completed with exit code 1.',
+  '##[group]Run case "$HIDDEN" in',
+  'case "$HIDDEN" in',
+  '##[endgroup]',
+].map((text, i) => `run\tUNKNOWN STEP\t2026-10-03T14:57:${String(30 + i).padStart(2, '0')}.0000000Z ${text}`).join('\n')
+
+describe('a real revoked Codex login', () => {
+  it('reads as an expired login on the codex harness, not a rejected key', () => {
+    const out = extractRunOutput(REVOKED)
+    assert.equal(out.reachedModel, false)
+    assert.equal(out.harness, 'codex')
+    assert.match(out.run, /token_revoked/)
+    assert.doesNotMatch(out.run, /BANNER_MODEL|HIDDEN/)
+    const d = diagnoseRun({ conclusion: 'failure', log: REVOKED })
+    assert.equal(d?.reason, 'The saved login expired.')
+    assert.equal(d?.credential, true)
+    assert.equal(d?.harness, 'codex')
+  })
+
+  it('the 401 annotation alone still reads as a rejected credential', () => {
+    const annotationOnly = REVOKED.split('\n').filter((l) => !/token_revoked|invalidated oauth/.test(l)).join('\n')
+    assert.equal(diagnoseRun({ conclusion: 'failure', log: annotationOnly })?.reason, 'The provider rejected the credential.')
   })
 })
 

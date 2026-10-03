@@ -24,8 +24,9 @@ export interface Diagnosis {
 // --- log slicing ---------------------------------------------------------------
 
 export interface RunOutput {
-  // The Run step's printed output: from the end of its script block up to and
-  // including the "Token usage" notice. Empty when there is no notice.
+  // The failing step's printed output: from the end of its script block up to
+  // and including the "Token usage" notice, or, when the run died before that
+  // notice, up to the first ##[error] line. Empty when there is neither.
   run: string
   // ##[error] / ##[warning] lines from any step (outside script blocks).
   problems: string
@@ -71,7 +72,9 @@ function outsideGroups(lines: LogLine[]): LogLine[] {
 // Slice a run log down to what the diagnosis may read. Works on
 // `gh run view --log` text (gh 2.10x prints "UNKNOWN STEP" in the step column
 // for every line) and on a logs zip without per-step files: the slice is
-// anchored on the LAST usage notice, and starts where the script block of the
+// anchored on the LAST usage notice (or, when the run failed before printing
+// it, on the FIRST ##[error] line, so a harness that died on a revoked login
+// still has its own output read), and starts where the script block of the
 // nearest preceding "##[group]Run " header ends. When real step names exist,
 // only the "Run" step's lines are considered first (fast path).
 export function extractRunOutput(log: string): RunOutput {
@@ -82,21 +85,23 @@ export function extractRunOutput(log: string): RunOutput {
   for (const t of outside) harness = HARNESS_BANNER.exec(t)?.[1] ?? harness
   const lines = all.some((l) => l.step === 'Run') ? all.filter((l) => l.step === 'Run') : all
 
-  let notice = -1
-  for (let i = lines.length - 1; i >= 0; i--) if (USAGE_NOTICE.test(lines[i].text)) { notice = i; break }
-  if (notice < 0) return { run: '', problems: problems.join('\n'), reachedModel: false, harness }
+  let anchor = -1
+  for (let i = lines.length - 1; i >= 0; i--) if (USAGE_NOTICE.test(lines[i].text)) { anchor = i; break }
+  const reachedModel = anchor >= 0
+  if (!reachedModel) anchor = lines.findIndex((l) => l.text.startsWith('##[error]'))
+  if (anchor < 0) return { run: '', problems: problems.join('\n'), reachedModel, harness }
 
   let header = -1
-  for (let i = notice - 1; i >= 0; i--) if (lines[i].text.startsWith('##[group]Run ')) { header = i; break }
+  for (let i = anchor - 1; i >= 0; i--) if (lines[i].text.startsWith('##[group]Run ')) { header = i; break }
   let start = 0
   if (header >= 0) {
     start = header + 1
-    for (let i = header + 1; i < notice; i++) if (lines[i].text.startsWith('##[endgroup]')) { start = i + 1; break }
+    for (let i = header + 1; i < anchor; i++) if (lines[i].text.startsWith('##[endgroup]')) { start = i + 1; break }
   } else {
-    for (let i = notice - 1; i >= 0; i--) if (lines[i].text.startsWith('##[endgroup]')) { start = i + 1; break }
+    for (let i = anchor - 1; i >= 0; i--) if (lines[i].text.startsWith('##[endgroup]')) { start = i + 1; break }
   }
-  const run = outsideGroups(lines.slice(start, notice + 1)).map((l) => l.text)
-  return { run: run.join('\n'), problems: problems.join('\n'), reachedModel: true, harness }
+  const run = outsideGroups(lines.slice(start, anchor + 1)).map((l) => l.text)
+  return { run: run.join('\n'), problems: problems.join('\n'), reachedModel, harness }
 }
 
 // The last "Token usage" line (one per run; last wins on retries).
@@ -116,7 +121,7 @@ export function parseUsage(text: string): Usage | null {
 // Known failure signatures, most specific first. Reasons are our own words:
 // never echo log text back, it can carry provider responses.
 const SIGNATURES: { re: RegExp; reason: string; hint: string; credential: boolean }[] = [
-  { re: /token (has )?expired|invalid_grant|refresh token (is )?(invalid|expired|revoked)|session expired/i,
+  { re: /token (has )?expired|invalid_grant|refresh token (is )?(invalid|expired|revoked)|session expired|token_revoked|invalidated oauth token/i,
     reason: 'The saved login expired.', hint: 'Log in again and connect the new login.', credential: true },
   { re: /\b401\b|invalid[ _-]?(api[ _-]?)?key|invalid x-api-key|authentication_error|unauthori[sz]ed/i,
     reason: 'The provider rejected the credential.', hint: 'Paste a fresh key or log in again.', credential: true },
