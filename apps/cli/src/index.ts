@@ -22,6 +22,7 @@ Usage: aeon <command> [subcommand] [options]
 Setup:
   init                Create your instance + connect GitHub, a model and Telegram
                       (interactive, safe to re-run; see \`aeon init --help\`)
+                      No terminal? Set up in the browser: https://www.aeon.fun/connect
 
 Read:
   skills ls|<name>    Skill roster + per-skill detail

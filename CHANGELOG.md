@@ -11,6 +11,18 @@ from or pin to; the template keeps serving the latest `main` to new forks.
 
 ### Added
 
+- **Aeon Connect: start an agent from the browser.** [www.aeon.fun/connect](https://www.aeon.fun/connect)
+  is the hosted, multi-tenant version of the dashboard (aaronjmars/aeon-connect). Sign in with GitHub,
+  **Create your aeon**: the repo is created first (public = a real fork of aeonfun/aeon that can pull
+  upstream; private = a copy generated from it, since GitHub forbids private forks; an account that
+  already has a fork can reuse it or make a copy), then GitHub's install page opens with only that
+  repo pre-selected for the Aeon Connect GitHub App. Actions setup is enable-only (Actions, PR
+  creation, a fork's disabled workflows and Issues), never widening permissions. Then connect a model
+  (paste, or OpenRouter in one click), pick skills, and run; failed runs get the same **Why?**
+  diagnosis as the local dashboard. Keys go straight into the repo's encrypted secrets, installation
+  tokens are scoped to the one repo, and nothing to clone or install. The README quick start, docs,
+  setup skill, CLI help and `bin/onboard` hints now lead with it, with `./aeon init` as the terminal
+  path. (aeon-connect #58, #59, #60, #61, #62)
 - **`./aeon init` sets up an instance in one command.** From a clone of the template it checks gh
   and its `repo` + `workflow` scopes, creates the instance from the template (never a fork, never
   aeonfun/aeon or a redirect), switches the folder over with aeonfun/aeon kept as `upstream`, runs

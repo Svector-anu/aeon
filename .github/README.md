@@ -4,6 +4,7 @@
 
 <p align="center">
   <strong>Star us&nbsp;❤️&nbsp;→</strong>&nbsp;&nbsp;
+  <a href="https://www.aeon.fun/connect"><img src="../docs/assets/btn-run.svg" alt="Run now: start your Aeon agent in the browser with Aeon Connect" height="34" align="absmiddle"></a>&nbsp;&nbsp;
   <a href="https://github.com/aeonfun/aeon/stargazers"><img src="../docs/assets/btn-star.svg" alt="Star Aeon on GitHub" height="34" align="absmiddle"></a>&nbsp;&nbsp;
   <a href="https://www.aeon.fun"><img src="../docs/assets/btn-site.svg" alt="aeon.fun" height="34" align="absmiddle"></a>&nbsp;&nbsp;
   <a href="https://www.aeon.fun/docs"><img src="../docs/assets/btn-docs.svg" alt="Aeon docs" height="34" align="absmiddle"></a>&nbsp;&nbsp;
@@ -16,6 +17,8 @@
   <strong>No approval loops. No babysitting. Configure once, forget forever.</strong>
 </p>
 
+> **▶ Start in your browser:** **[www.aeon.fun/connect](https://www.aeon.fun/connect)** - sign in with GitHub, connect a model, pick skills. No clone, no terminal.
+>
 > **🤖 Using a coding agent?** Point it here: **read https://www.aeon.fun/skills/aeon.md and follow the instructions to set up your Aeon agent.**
 
 <div align="center">
@@ -36,8 +39,15 @@
 ## Quick start
 
 <p align="center">
-  <img src="../docs/assets/quickstart-aeon.jpg" alt="Quick start in four steps: 1 Fork - Use this template to get your own repo copy. 2 Connect - add a Telegram, Discord, Slack, or email channel. 3 Pick skills - toggle skills on and set their cron schedule. 4 Runs itself - Aeon runs unattended on GitHub Actions." width="100%" />
+  <img src="../docs/assets/quickstart-aeon.jpg" alt="Quick start in four steps: Sign in, Connect, Pick, Run. 1 Sign in - log in with GitHub at www.aeon.fun/connect and get your own repo. 2 Connect - connect a model, such as your Claude subscription. 3 Pick skills - toggle skills on and set their schedule. 4 Runs itself - Aeon runs unattended on GitHub Actions." width="100%" />
 </p>
+
+**In your browser (recommended): [Aeon Connect](https://www.aeon.fun/connect).** Sign in with GitHub at **[www.aeon.fun/connect](https://www.aeon.fun/connect)** and click **Create your aeon**: it makes **your own repo** (public = a fork of `aeonfun/aeon`, free Actions minutes; private = a copy, on your own minutes) and turns GitHub Actions on. Install the [Aeon Connect GitHub App](https://github.com/apps/aeon-connect) on that one repo (GitHub's page opens with it pre-selected), then **connect a model** (a Claude subscription token from `claude setup-token`, an API key, a ChatGPT login, or OpenRouter in one click), **pick skills**, and press **Run**. Keys go straight into your repo's encrypted secrets; Aeon Connect only hosts the dashboard, and every run happens on your own GitHub Actions.
+
+**Using a coding agent?** Paste this into Claude Code, Codex, Hermes or OpenClaw: `read https://www.aeon.fun/skills/aeon.md and follow the instructions to set up your aeon agent`.
+
+<details>
+<summary><strong>Prefer the terminal?</strong></summary>
 
 You need **Node.js 20+** and the **[GitHub CLI](https://cli.github.com/) (`gh`)**. Then:
 
@@ -46,12 +56,14 @@ git clone https://github.com/aeonfun/aeon && cd aeon
 ./aeon init
 ```
 
-`./aeon init` does the rest and tells you what it did at each step: signs you in to GitHub, creates **your own repo** from the template (public by default - Actions minutes are free; `--private` if you prefer), points this folder and `gh` at it, turns on GitHub Actions, stores your GitHub token for runs, connects a model (any of nine [harnesses](../docs/harnesses.md): a Claude subscription, an API key, or one OpenRouter key) and, if you want, links Telegram. It is safe to re-run: every step checks first and skips what is already done. Then `./aeon` opens the dashboard at [localhost:5555](http://localhost:5555) to **pick skills** and **Run**. `bin/onboard` re-checks the whole setup any time (read-only).
+`./aeon init` does the rest and tells you what it did at each step: signs you in to GitHub, creates **your own repo** from the template (public by default - Actions minutes are free; `--private` if you prefer), points this folder and `gh` at it, turns on GitHub Actions, stores your GitHub token for runs, connects a model (any of nine [harnesses](../docs/harnesses.md): a Claude subscription, an API key, or one OpenRouter key) and, if you want, links Telegram. It is safe to re-run: every step checks first and skips what is already done. Then `./aeon` opens the same dashboard locally at [localhost:5555](http://localhost:5555) to **pick skills** and **Run**. `bin/onboard` re-checks the whole setup any time (read-only).
+
+</details>
 
 <details>
 <summary><strong>Prefer to do it by hand?</strong></summary>
 
-1. Click **Use this template** on [the repo page](https://github.com/aeonfun/aeon) (keep it public; Actions minutes are free). Use the template rather than **Fork**: a fork starts with **GitHub Actions disabled** and its schedules never fire until you enable workflows in its Actions tab.
+1. Click **Use this template** on [the repo page](https://github.com/aeonfun/aeon) (keep it public; Actions minutes are free). A template copy starts with GitHub Actions on. If you fork by hand instead, open the fork's **Actions** tab and enable workflows first: a fork starts with Actions off and its schedules never fire until you do. ([Aeon Connect](https://www.aeon.fun/connect) forks public instances and turns Actions on for you.)
 2. Clone it and point `gh` at it - without this, secrets you set land on `aeonfun/aeon` instead of your repo:
 
    ```bash
@@ -61,7 +73,7 @@ git clone https://github.com/aeonfun/aeon && cd aeon
    ./aeon
    ```
 
-3. In the dashboard: **Authenticate** -> **add a channel** -> **pick skills** -> **Run**.
+3. In the dashboard: **Connect a model** -> **add a channel** -> **pick skills** -> **Run**.
 
 Everything is also an `./aeon` command ([CLI](../apps/cli/README.md)) or a `/aeon` chat command ([setup skill](../docs/aeon-setup.md), installable as a [Claude Code or Codex plugin](../docs/aeon-setup.md#install)). For skills that reach other repos, add a classic PAT with `repo` + `workflow` as `GH_GLOBAL` ([details](../docs/CONFIGURATION.md#cross-repo-access)).
 
@@ -70,7 +82,7 @@ Everything is also an `./aeon` command ([CLI](../apps/cli/README.md)) or a `/aeo
 <details>
 <summary><strong>No admin rights / can't install <code>gh</code>?</strong></summary>
 
-Grab the `gh_*_macOS_arm64.zip` (or your platform's binary) from [github.com/cli/cli/releases](https://github.com/cli/cli/releases) and drop it on your `PATH` (e.g. `~/.local/bin`). Then `gh auth login`.
+You don't need either: [Aeon Connect](https://www.aeon.fun/connect) sets everything up from the browser. For the terminal path, grab the `gh_*_macOS_arm64.zip` (or your platform's binary) from [github.com/cli/cli/releases](https://github.com/cli/cli/releases) and drop it on your `PATH` (e.g. `~/.local/bin`). Then `gh auth login`.
 
 </details>
 
@@ -185,7 +197,7 @@ skills:
 
 Full reference - scheduling, `var`, models, [authentication](../docs/CONFIGURATION.md#authentication), [notification channels](../docs/CONFIGURATION.md#notifications), API keys, guardrails: **[Configuration](../docs/CONFIGURATION.md)**.
 
-**GitHub permissions:** the built-in `GITHUB_TOKEN` covers same-repo work; add **one classic PAT** as `GH_GLOBAL` with **`repo`** + **`workflow`** scopes to drive every cross-repo, private, disclosure, and workflow-editing skill. No `read:org` / `admin:org`. See [Cross-repo access](../docs/CONFIGURATION.md#cross-repo-access).
+**GitHub permissions:** the built-in `GITHUB_TOKEN` covers same-repo work; add **one classic PAT** as `GH_GLOBAL` with **`repo`** + **`workflow`** scopes to drive every cross-repo, private, disclosure, and workflow-editing skill. No `read:org` / `admin:org`. See [Cross-repo access](../docs/CONFIGURATION.md#cross-repo-access). Set up with [Aeon Connect](https://www.aeon.fun/connect)? The dashboard reaches your repo through the Aeon Connect GitHub App, so no PAT is needed to get going; `GH_GLOBAL` is only for the cross-repo skills above.
 
 ---
 

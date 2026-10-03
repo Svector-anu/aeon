@@ -14,9 +14,10 @@ Most contributions fall into one of three buckets, each with its own checklist b
 
 ## Before you start
 
-- **Fork or use the template.** This repo is a public template — click **Use this
-  template** (or `gh repo fork aeonfun/aeon --clone`). Run your own instance as
-  a fork; open PRs back here for changes that benefit everyone.
+- **Fork to contribute.** PRs come from a fork (`gh repo fork aeonfun/aeon --clone`).
+  Just want to run an agent? Use [Aeon Connect](https://www.aeon.fun/connect)
+  (browser) or `./aeon init` (terminal) instead; open PRs back here for changes
+  that benefit everyone.
 - **Branch from `main`.** Never push to `main`. Use a descriptive branch name
   (`feat/…`, `fix/…`, `docs/…`).
 - **One change per PR.** A focused 20-line fix lands faster than a 500-line bundle.

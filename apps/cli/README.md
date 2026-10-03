@@ -28,6 +28,8 @@ Setting up a new instance? `./aeon init` does it end to end from a clone of
 at it, enables Actions, stores `GH_GLOBAL`, connects a model (from the credential
 manifest in `harness-adapter/harnesses.json`) and links Telegram. Every step checks
 first, so it is safe to re-run; `./aeon init --dry-run` shows what it would do.
+No terminal? [Aeon Connect](https://www.aeon.fun/connect) does the same setup in the
+browser, and this CLI works on that repo too once you clone it.
 
 ```sh
 ./aeon skills ls               # ← same as ./apps/cli/aeon skills ls

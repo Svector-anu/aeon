@@ -13,7 +13,7 @@ fi
 
 # Preflight: the dashboard's /api/* routes shell out to `gh` for secrets,
 # workflow runs, and auth. Without an authenticated gh CLI nothing works,
-# and the failure shows up much later as a 503 in the Authenticate modal.
+# and the failure shows up much later as a 503 in the Connect modal.
 if ! command -v gh >/dev/null 2>&1; then
   cat >&2 <<'EOF'
 GitHub CLI (`gh`) not found.
@@ -28,6 +28,9 @@ read your repo. Install it before launching:
   Windows:      winget install --id GitHub.cli
 
 Then run: gh auth login
+
+No terminal setup wanted? Aeon Connect runs the same dashboard in your
+browser, nothing to install: https://www.aeon.fun/connect
 EOF
   exit 1
 fi
@@ -42,6 +45,9 @@ Then re-run ./aeon. The dashboard also needs a default repo — once you've
 created/cloned your own copy, set it with:
 
   gh repo set-default <owner>/<repo>
+
+No terminal setup wanted? Aeon Connect runs the same dashboard in your
+browser, nothing to install: https://www.aeon.fun/connect
 EOF
   exit 1
 fi

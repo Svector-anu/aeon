@@ -128,11 +128,11 @@ fi
 case "$(printf '%s' "$REPO_SLUG" | tr '[:upper:]' '[:lower:]')" in
   "")
     emit fail "instance repo" "no GitHub remote (origin)" \
-      "./aeon init  (creates your repo from the aeonfun/aeon template and points this folder at it)"
+      "./aeon init  (creates your repo from the aeonfun/aeon template and points this folder at it), or set up in the browser: https://www.aeon.fun/connect"
     ;;
   aeonfun/aeon|aaronjmars/aeon)
     emit fail "instance repo" "origin is $REPO_SLUG, the shared template - not your own instance" \
-      "./aeon init  (creates your repo from the template; secrets and runs then land on yours)"
+      "./aeon init  (creates your repo from the template; secrets and runs then land on yours), or set up in the browser: https://www.aeon.fun/connect"
     ;;
   *)
     emit pass "instance repo" "$REPO_SLUG" ""
@@ -314,7 +314,7 @@ if [[ -n "$REPO_SLUG" && "$GH_READY" == "true" ]]; then
     emit pass "GitHub Actions" "messages.yml has run at least once" ""
   else
     emit warn "GitHub Actions" "no runs yet for messages.yml" \
-      "./aeon init enables Actions for you. Forks start with Actions off: open https://github.com/$REPO_SLUG/actions and enable workflows (or Settings -> Actions -> General)."
+      "./aeon init (or Aeon Connect) enables Actions for you. Forks start with Actions off: open https://github.com/$REPO_SLUG/actions and enable workflows (or Settings -> Actions -> General)."
   fi
 else
   emit warn "GitHub Actions" "could not query run history" \
@@ -402,7 +402,7 @@ if [[ "$REMOTE" == "true" ]]; then
   fi
   case "$(printf '%s' "$REPO_SLUG" | tr '[:upper:]' '[:lower:]')" in
     aeonfun/aeon|aaronjmars/aeon)
-      echo "Refusing to dispatch on $REPO_SLUG, the shared template. Run ./aeon init first." >&2
+      echo "Refusing to dispatch on $REPO_SLUG, the shared template. Run ./aeon init first (or set up in the browser: https://www.aeon.fun/connect)." >&2
       exit 1 ;;
   esac
   # heartbeat is the template's always-on health skill: one run exercises

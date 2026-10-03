@@ -3,8 +3,10 @@
 // safe to re-run at any point (a half-finished init just picks up where it
 // stopped). Steps:
 //   1. GitHub CLI: installed, signed in, token carries repo + workflow
-//   2. Your instance repo: created from the aeonfun/aeon TEMPLATE (not a fork:
-//      forks start with Actions disabled), and this folder pointed at it
+//   2. Your instance repo: created from the aeonfun/aeon TEMPLATE (a template
+//      copy starts with Actions on and is not limited to one fork per account;
+//      Aeon Connect forks public instances and turns Actions on itself), and
+//      this folder pointed at it
 //   3. gh default repo = your instance (secrets never land on aeonfun/aeon)
 //   4. Actions enabled + Actions may open PRs (the default token is left as is)
 //   5. GH_GLOBAL from your gh token (only when it has repo + workflow)
@@ -47,7 +49,10 @@ Options:
   --dry-run          Show what each step would do, change nothing
 
 Each step prints a check (${'✓'}) or what it fixed. Run bin/onboard any time for a
-read-only health check.`
+read-only health check.
+
+No terminal setup wanted? Aeon Connect does the same in the browser:
+https://www.aeon.fun/connect`
 
 const TEMPLATE = 'aeonfun/aeon'
 
@@ -163,7 +168,7 @@ async function stepGh(): Promise<string> {
   const v = run('gh', ['--version'])
   if (!v.ok) {
     report('gh', 'fail', 'GitHub CLI (gh) is not installed',
-      'macOS: brew install gh  |  Linux/Windows: https://github.com/cli/cli#installation  - then re-run ./aeon init')
+      'macOS: brew install gh  |  Linux/Windows: https://github.com/cli/cli#installation  - then re-run ./aeon init  (no terminal? https://www.aeon.fun/connect)')
     finish(false)
   }
   report('gh', 'ok', `gh installed (${v.out.split('\n')[0].replace(/^gh version /, '').split(' ')[0]})`)

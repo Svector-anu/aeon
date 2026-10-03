@@ -35,8 +35,9 @@ at your instance repo when it asks.
 
 - The [GitHub CLI](https://cli.github.com/) (`gh`) authenticated - the skill drives
   everything through `gh`, the same way the dashboard does.
-- An Aeon instance repo to operate on (create one from the
-  [template](https://github.com/aeonfun/aeon)).
+- An Aeon instance repo to operate on. No instance yet? Create one in the browser
+  with [Aeon Connect](https://www.aeon.fun/connect), or from the
+  [template](https://github.com/aeonfun/aeon) with `./aeon init`.
 
 Everything the skill does is plain `gh` + `./aeon` commands, so nothing about it is
 tied to one coding agent beyond where the skill file is loaded from.

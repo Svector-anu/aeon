@@ -94,7 +94,7 @@ Your job is to drive that script, regenerate the catalog, and wrap the result in
    gh pr merge "$PR_URL" --squash --delete-branch --auto \
      || gh pr merge "$PR_URL" --squash --delete-branch
    ```
-   If **both** merge attempts fail, the repo's "Allow GitHub Actions to create and approve pull requests" setting is likely still off (the dashboard normally enables it before dispatching this skill; a cron/CLI run may not have). Don't error — leave the PR open and tell the operator to merge it (and to run `bin/onboard`, which enables the setting). All installed skills land **disabled** — say so in the PR so the operator knows they must enable them.
+   If **both** merge attempts fail, the repo's "Allow GitHub Actions to create and approve pull requests" setting is likely still off (the dashboard normally enables it before dispatching this skill; a cron/CLI run may not have). Don't error — leave the PR open and tell the operator to merge it (and to turn that setting on: re-run `./aeon init`, open the instance in Aeon Connect, which turns it on, or enable it under Settings → Actions → General). All installed skills land **disabled** — say so in the PR so the operator knows they must enable them.
 
 7. **Notify** one concise line with the result. On auto-merge success, point the operator at the dashboard (new skills sit in their pack — enable that pack in the **Packs** view to see them):
    ```bash

@@ -157,7 +157,7 @@ One classic PAT covers the whole instance - no separate read or secrets PAT is n
 - **`repo`** - cross-repo and private-repo read/write, repository security advisories + private vulnerability reports (the disclosure/PVR skills), and writing Actions secrets back (the OAuth-MCP / Grok refresh path).
 - **`workflow`** - required only for skills that push changes under `.github/workflows/` (`aeon-update`, `spawn-instance`, `auto-workflow`); without it those pushes 403.
 
-The quickest way to set it: `./aeon init` (or `./aeon auth --github`) copies your `gh` login token into `GH_GLOBAL`, after checking it carries `repo` + `workflow` (`gh auth refresh -h github.com -s repo,workflow` adds them). A gh login token works like a classic PAT, but GitHub revokes it after a year without use, or when more than 10 tokens exist for the same user, app and scopes (each `gh auth login` mints one). That is fine to get started; for an instance that should run for months, create a **dedicated classic PAT** (`repo` + `workflow`) and set it with `./aeon secrets set GH_GLOBAL --stdin`.
+Instances set up with [Aeon Connect](https://www.aeon.fun/connect) don't need it to get started: the dashboard reaches the repo through the Aeon Connect GitHub App and runs use `GITHUB_TOKEN`. Add `GH_GLOBAL` there (Settings) only when you turn on a cross-repo skill. From the terminal, the quickest way to set it: `./aeon init` (or `./aeon auth --github`) copies your `gh` login token into `GH_GLOBAL`, after checking it carries `repo` + `workflow` (`gh auth refresh -h github.com -s repo,workflow` adds them). A gh login token works like a classic PAT, but GitHub revokes it after a year without use, or when more than 10 tokens exist for the same user, app and scopes (each `gh auth login` mints one). That is fine to get started; for an instance that should run for months, create a **dedicated classic PAT** (`repo` + `workflow`) and set it with `./aeon secrets set GH_GLOBAL --stdin`.
 
 **`GH_SECRETS_PAT` is optional.** The two paths that write rotated logins back as secrets (MCP OAuth refresh, grok's X login) try `GH_SECRETS_PAT` first and fall back to `GH_GLOBAL`. Set it only to keep that secrets-write power on a separate token (a fine-grained PAT with **Secrets: read/write** on this repo).
 
@@ -173,7 +173,7 @@ Per-skill execution state (`memory/cron-state.json` — status, success rate, qu
   <img src="../docs/assets/providers.jpg" alt="9 ways to power Claude Code: Claude subscription, Anthropic API, OpenRouter, Bankr, UsePod, Venice, Surplus, Grok, GLM" width="640" />
 </p>
 
-Aeon can power Claude Code **ten** ways. Two are **direct** to Anthropic; the other eight route through a **gateway**. Add a credential in the dashboard's Authenticate modal and it's saved as the secret below (HivemindOS is not in the modal yet - set `HIVEMINDOS_CREDIT_TOKEN` as a repo secret directly). (Separately, the [Grok Build harness](harnesses.md) runs the `grok` CLI instead of Claude Code - that's a different axis from the gateways here.)
+Aeon can power Claude Code **ten** ways. Two are **direct** to Anthropic; the other eight route through a **gateway**. Add a credential in the dashboard's Connect modal (Connect a model) and it's saved as the secret below (HivemindOS is not in the modal yet - set `HIVEMINDOS_CREDIT_TOKEN` as a repo secret directly). (Separately, the [Grok Build harness](harnesses.md) runs the `grok` CLI instead of Claude Code - that's a different axis from the gateways here.)
 
 **Routing is automatic.** `aeon.yml` ships `gateway: { provider: auto }`, and each run resolves the live provider from *whichever secrets are set*, in priority order - so adding or removing a key changes routing with no re-config:
 
@@ -198,8 +198,8 @@ Override the order with the repo variable **`GATEWAY_ORDER`** (space-separated n
 | <img src="https://icons.duckduckgo.com/ip3/venice.ai.ico" width="16" valign="middle"> [Venice](https://venice.ai) | `VENICE_API_KEY` | Privacy-first; OpenAI-compatible, bridged via a per-run [claude-code-router](https://github.com/musistudio/claude-code-router) sidecar. Point it at any Venice-compatible endpoint with the `VENICE_BASE_URL` repo variable |
 | <img src="https://icons.duckduckgo.com/ip3/surplusintelligence.ai.ico" width="16" valign="middle"> [Surplus](https://surplusintelligence.ai) | `SURPLUS_API_KEY` | Routed via The Bridge; settles in USDC on Base - fund the wallet + `approve()` once before use |
 | <img src="https://icons.duckduckgo.com/ip3/x.ai.ico" width="16" valign="middle"> [Grok (xAI)](https://x.ai/api) | `XAI_API_KEY` | Anthropic-native passthrough to `api.x.ai`; the `xai-…` key is auto-detected. Set the model with the `GROK_MODEL` repo variable (default `grok-4.7`). Same key also powers the [grok harness](harnesses.md) |
-| <img src="https://icons.duckduckgo.com/ip3/z.ai.ico" width="16" valign="middle"> [GLM (Z.AI)](https://z.ai) | `GLM_API_KEY` | Anthropic-native passthrough to `api.z.ai/api/anthropic`. No key prefix - pick GLM in Authenticate. Alias `ZAI_API_KEY`. Set the model with `GLM_MODEL` (default `glm-5.3`, `glm-5.3-flash` for the haiku tier; per-tier `GLM_MODEL_OPUS` / `GLM_MODEL_SONNET` / `GLM_MODEL_HAIKU`). Pin reasoning depth with `GLM_REASONING_EFFORT` (`low` / `high` / `max`, default `high`). Pin with `gateway.provider: glm`. `harness: glm` is a dead name. |
-| <img src="https://icons.duckduckgo.com/ip3/hivemindos.liamvisionary.com.ico" width="16" valign="middle"> [HivemindOS Models](https://hivemindos.liamvisionary.com) | `HIVEMINDOS_CREDIT_TOKEN` | Billed to a **credit balance** instead of a provider account of your own, so an engine can be handed to someone who holds no provider keys. OpenAI-compatible, bridged via the claude-code-router sidecar plus `scripts/ccr-hivemindos.js` (per-request `Idempotency-Key`, sent non-streamed; the router replays the JSON answer as SSE). Set the model with `HIVEMINDOS_MODEL` (default `inclusionai/ling-3.0-flash`; native `claude-*`/`grok-*` ids fall back to it), point at another deployment with `HIVEMINDOS_BASE_URL`, cap each call with `HIVEMINDOS_MAX_TOKENS` (default 4096, `0` disables; an empty variable means the default), and `HIVEMINDOS_REASONING=keep` on a model that honours reasoning-off. Pin with `gateway.provider: hivemindos`; under `auto` the token alone resolves, last in the cascade. Not in the dashboard Authenticate modal yet - set the secret directly. |
+| <img src="https://icons.duckduckgo.com/ip3/z.ai.ico" width="16" valign="middle"> [GLM (Z.AI)](https://z.ai) | `GLM_API_KEY` | Anthropic-native passthrough to `api.z.ai/api/anthropic`. No key prefix - pick GLM in the Connect modal. Alias `ZAI_API_KEY`. Set the model with `GLM_MODEL` (default `glm-5.3`, `glm-5.3-flash` for the haiku tier; per-tier `GLM_MODEL_OPUS` / `GLM_MODEL_SONNET` / `GLM_MODEL_HAIKU`). Pin reasoning depth with `GLM_REASONING_EFFORT` (`low` / `high` / `max`, default `high`). Pin with `gateway.provider: glm`. `harness: glm` is a dead name. |
+| <img src="https://icons.duckduckgo.com/ip3/hivemindos.liamvisionary.com.ico" width="16" valign="middle"> [HivemindOS Models](https://hivemindos.liamvisionary.com) | `HIVEMINDOS_CREDIT_TOKEN` | Billed to a **credit balance** instead of a provider account of your own, so an engine can be handed to someone who holds no provider keys. OpenAI-compatible, bridged via the claude-code-router sidecar plus `scripts/ccr-hivemindos.js` (per-request `Idempotency-Key`, sent non-streamed; the router replays the JSON answer as SSE). Set the model with `HIVEMINDOS_MODEL` (default `inclusionai/ling-3.0-flash`; native `claude-*`/`grok-*` ids fall back to it), point at another deployment with `HIVEMINDOS_BASE_URL`, cap each call with `HIVEMINDOS_MAX_TOKENS` (default 4096, `0` disables; an empty variable means the default), and `HIVEMINDOS_REASONING=keep` on a model that honours reasoning-off. Pin with `gateway.provider: hivemindos`; under `auto` the token alone resolves, last in the cascade. Not in the dashboard Connect modal yet - set the secret directly. |
 
 #### Adding a gateway
 
@@ -245,7 +245,14 @@ The gate also rejects state-changing requests whose `Origin` isn't allowlisted, 
 
 ## Two-repo strategy
 
-This repo is a public template. Run your own instance as a **private fork** so memory, articles, and API keys stay private:
+This repo is a public template; your instance is your own repo next to it. Pick its visibility for what it holds:
+
+- **Public** (free Actions minutes; memory, articles, and run logs are public). [Aeon Connect](https://www.aeon.fun/connect) makes it a real fork of `aeonfun/aeon` and turns Actions on for you. By hand, use the template, or fork and enable workflows in the fork's Actions tab (forks start with Actions off).
+- **Private** (memory, articles, and logs stay private; runs use your own Actions minutes). GitHub does not allow a private fork of a public repo, so this is a copy: Aeon Connect generates it from the template, `./aeon init --private` does the same, or click **Use this template** and pick Private.
+
+API keys stay private either way: they are encrypted repo secrets, never files.
+
+To pull framework updates, run the `aeon-update` skill (it opens a PR that merges upstream into your instance and works for forks and copies alike), or merge by hand:
 
 ```bash
 git remote add upstream https://github.com/aeonfun/aeon.git
@@ -272,7 +279,7 @@ Private repos: Free plan = 2,000 min/mo, Pro/Team = 3,000 + $0.008/min overage. 
 
 ## Authentication
 
-Aeon needs **at least one** way to reach a model. Add it in the dashboard's **Authenticate** modal, or from the terminal with `aeon auth`:
+Aeon needs **at least one** way to reach a model. Add it in the dashboard's **Connect** modal (**Connect a model**, in [Aeon Connect](https://www.aeon.fun/connect) or the local `./aeon` dashboard), or from the terminal with `aeon auth`:
 
 - **A Claude subscription** - one-click OAuth, or `claude setup-token` on the CLI (prints an `sk-ant-oat01-…` token, valid 1 year).
 - **An API key** - Anthropic, Anthropic-compatible, or an [LLM gateway](#llm-gateways) key (Bankr, OpenRouter, Surplus, Venice, UsePod). Paste it and the provider is auto-detected from its prefix.
