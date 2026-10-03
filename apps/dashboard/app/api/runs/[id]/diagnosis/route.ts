@@ -3,8 +3,8 @@ import { errorResponse, requireGh } from '@/lib/http'
 import { getConnectStore } from '@/lib/connect-store'
 import { readRunDiagnosis } from '@/lib/run-diagnosis-server'
 
-// Why a failed run failed, in plain words, with the next step
-// (lib/run-diagnosis.ts). HQ asks only for failed runs it is showing.
+// Why a failed or timed-out run ended that way, in plain words, with the next
+// step (lib/run-diagnosis.ts). HQ asks only when a run is opened.
 //   GET -> { diagnosis }  (null while running, or when the run did not fail)
 export async function GET(
   _request: Request,

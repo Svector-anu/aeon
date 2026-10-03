@@ -14,7 +14,8 @@ const gh = async (args: string[], timeout = 20_000) =>
 
 const cacheKey = (runId: string) => `run-diagnosis:${runId}`
 
-// Why run `runId` failed; null while it is still going or when it did not fail.
+// Why run `runId` failed or timed out; null while it is still going, or when
+// it ended any other way.
 // Throws on gh trouble (logs can lag a few seconds behind completion), so the
 // caller can simply ask again later.
 export async function readRunDiagnosis(store: KvStore, runId: string): Promise<Diagnosis | null> {
@@ -23,7 +24,7 @@ export async function readRunDiagnosis(store: KvStore, runId: string): Promise<D
   if (cached) return cached.diagnosis
   const info = JSON.parse(await gh(['run', 'view', runId, ...ghArgsRepo(), '--json', 'status,conclusion'])) as { status: string; conclusion: string | null }
   if (info.status !== 'completed') return null
-  const diagnosis = info.conclusion === 'success' ? null
+  const diagnosis = info.conclusion !== 'failure' && info.conclusion !== 'timed_out' ? null
     : diagnoseRun({ conclusion: info.conclusion, log: await gh(['run', 'view', runId, ...ghArgsRepo(), '--log'], 45_000) })
   await store.set(cacheKey(runId), { diagnosis }, 86_400)
   return diagnosis

@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react'
 import type { Run } from './types'
 import type { Diagnosis } from './run-diagnosis'
 
-// Failed-run diagnoses, fetched lazily (only for failed runs that are on screen)
-// and kept for the page's lifetime: a finished run never changes. A failed fetch
-// is forgotten, so the next render asks again (logs can lag behind completion).
+// Runs worth explaining: the ones that failed or hit their time limit.
+export const isDiagnosable = (run: Pick<Run, 'conclusion'>) => run.conclusion === 'failure' || run.conclusion === 'timed_out'
+
+// Failed-run diagnoses, fetched lazily (only when shown or opened) and kept for
+// the page's lifetime: a finished run never changes. A failed fetch is
+// forgotten, so opening it again asks again (logs can lag behind completion).
 const cache = new Map<number, Promise<Diagnosis | null>>()
 
 function fetchDiagnosis(id: number): Promise<Diagnosis | null> {
@@ -22,15 +25,23 @@ function fetchDiagnosis(id: number): Promise<Diagnosis | null> {
   return p
 }
 
-// Why `run` failed, once its log has been read; null for any other run.
-export function useRunDiagnosis(run: Pick<Run, 'id' | 'conclusion'>): Diagnosis | null {
-  const id = run.conclusion === 'failure' ? run.id : null
-  const [result, setResult] = useState<{ id: number; diagnosis: Diagnosis | null } | null>(null)
+export type DiagnosisState =
+  | { status: 'idle' | 'loading' | 'error' }
+  | { status: 'done'; diagnosis: Diagnosis | null }
+
+// Why `run` failed, once its log has been read. Idle for runs that did not
+// fail, and while `enabled` is false (e.g. a closed "Why?" toggle).
+export function useRunDiagnosis(run: Pick<Run, 'id' | 'conclusion'>, enabled = true): DiagnosisState {
+  const id = enabled && isDiagnosable(run) ? run.id : null
+  const [result, setResult] = useState<{ id: number; state: DiagnosisState } | null>(null)
   useEffect(() => {
     if (id === null) return
     let live = true
-    fetchDiagnosis(id).then((diagnosis) => { if (live) setResult({ id, diagnosis }) }).catch(() => {})
-    return () => { live = false }
+    fetchDiagnosis(id)
+      .then((diagnosis) => { if (live) setResult({ id, state: { status: 'done', diagnosis } }) })
+      .catch(() => { if (live) setResult({ id, state: { status: 'error' } }) })
+    return () => { live = false; setResult(null) }
   }, [id])
-  return result && result.id === id ? result.diagnosis : null
+  if (id === null) return { status: 'idle' }
+  return result && result.id === id ? result.state : { status: 'loading' }
 }

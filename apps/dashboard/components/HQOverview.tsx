@@ -5,7 +5,7 @@ import { packGroups } from '../lib/constants'
 import { timeAgo, runStatusColor, runStatusGlyph } from '../lib/utils'
 import { Scramble, Flip, VelocityMarquee } from './ui/Animated'
 import { Section } from './ui/Section'
-import { RunDiagnosis } from './RunDiagnosis'
+import { RunDiagnosisToggle } from './RunDiagnosis'
 
 interface HQOverviewProps {
   skills: Skill[]
@@ -134,8 +134,8 @@ export function HQOverview({ skills, runs, enabledCount, workingCount, categoryF
                 <span className="text-xs text-primary-70 truncate flex-1 font-mono">{run.workflow}</span>
                 <span className="text-[10px] text-primary-35 font-mono tabular-nums uppercase tracking-[0.14em]">{timeAgo(run.created_at)}</span>
               </div>
-              {/* Failed runs only: why, and the next step (log read lazily). */}
-              <RunDiagnosis run={run} onConnect={onConnect} className="mt-1 pl-8" />
+              {/* Failed runs only: "Why?" reads the log on demand. */}
+              <RunDiagnosisToggle run={run} onConnect={onConnect} className="mt-1 pl-8" />
             </div>
           ))}
           {!runs.length && (
