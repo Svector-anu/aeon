@@ -33,7 +33,7 @@
 #   "mcp": "native+overlay",
 #   "max_turns": "timeout",
 #   "claude_md": "native",
-#   "default_model": "moonshotai/kimi-k2.6",
+#   "default_model": "moonshotai/kimi-k2.7-code",
 #   "credentials": [
 #     { "secret": "KIMI_AUTH", "kind": "oauth_capture", "auth_mode": "native-oauth", "label": "Kimi (Moonshot) login", "get_url": "https://www.kimi.com", "login_cmd": "kimi login", "aeon_cmd": "./aeon auth --harness kimi", "cred_paths": [".kimi-code/credentials", ".kimi-code/config.toml"], "refresh": "re-run ./aeon auth --harness kimi if a run reports a login error" },
 #     { "secret": "MOONSHOT_API_KEY", "kind": "api_key", "auth_mode": "native-key", "label": "Moonshot API key", "prefix": "sk-", "get_url": "https://platform.moonshot.ai/console/api-keys", "aeon_cmd": "./aeon auth --harness kimi --key <sk-...>" },

@@ -226,8 +226,9 @@ TOML
         printf '%s' "$KIMI_AUTH" | base64 -d | tar xzf - -C "$HOME"
         echo "kimi: restored Moonshot login" ;;
       native-key)
-        # MOONSHOT_API_KEY → Moonshot provider. Model id is best-effort; adjust to
-        # your Moonshot plan if it 404s.
+        # MOONSHOT_API_KEY → Moonshot provider. Pins Moonshot's native id for the
+        # dashboard default (moonshotai/kimi-k2.7-code -> kimi-k2.7-code, listed on
+        # Moonshot's own API); adjust to your Moonshot plan if it 404s.
         need MOONSHOT_API_KEY "a Moonshot API key (or use the OAuth capture)"
         cat > "$HOME/.kimi-code/config.toml" <<TOML
 default_model = "kimi-native"
@@ -239,7 +240,7 @@ api_key = "$MOONSHOT_API_KEY"
 
 [models.kimi-native]
 provider = "moonshot"
-model = "kimi-k2.6"
+model = "kimi-k2.7-code"
 max_context_size = 131072
 TOML
         chmod 600 "$HOME/.kimi-code/config.toml"

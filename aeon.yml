@@ -232,10 +232,10 @@ chains:
 # Options: claude-sonnet-5-5, claude-opus-5-5, claude-haiku-4-5-20251001
 # (older claude-sonnet-5 / claude-opus-4-8 still accepted)
 # (Grok harness model: grok-4.7, the flagship reasoning model and grok's current
-#  default, run with --no-subagents in CI; grok-4.6 and grok-4.5 are also accepted on
-#  an X-account login. grok-4.7 is the gateway default too. The older coding ids
-#  (grok-build-0.1, grok-composer-2.5-fast, grok-4.3) are gateway-only, reachable via
-#  XAI_API_KEY + the GROK_MODEL var.)
+#  default, run with --no-subagents in CI; grok-4.6 is also offered, and an existing
+#  grok-4.5 pin is still accepted on an X-account login. grok-4.7 is the gateway
+#  default too. The older coding ids (grok-build-0.1, grok-composer-2.5-fast,
+#  grok-4.3) are gateway-only, reachable via XAI_API_KEY + the GROK_MODEL var.)
 # The non-claude harnesses use their OWN model ids (codex openai/*, kimi moonshotai/*,
 # vibe mistralai/*, pi deepseek/*) — surfaced in the dashboard picker per harness; see
 # docs/harnesses.md. The value below only applies to the claude/grok harnesses.

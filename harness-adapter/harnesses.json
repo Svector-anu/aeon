@@ -9,7 +9,7 @@
       "124": "timeout"
     }
   },
-  "generated": "2026-10-03T15:34:33Z",
+  "generated": "2026-10-03T15:37:24Z",
   "count": 9,
   "harnesses": [
     {
@@ -340,7 +340,7 @@
       "mcp": "native+overlay",
       "max_turns": "timeout",
       "claude_md": "native",
-      "default_model": "moonshotai/kimi-k2.6",
+      "default_model": "moonshotai/kimi-k2.7-code",
       "credentials": [
         {
           "secret": "KIMI_AUTH",

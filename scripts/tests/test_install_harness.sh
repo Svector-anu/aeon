@@ -113,14 +113,14 @@ if [ -f "$CFG" ]; then
 else bad "codex/native-key: no config written"; fi
 
 # --- 3. kimi + vibe config generation --------------------------------------
-run kimi HM=moonshotai/kimi-k2.6 AUTH_MODE=openrouter OPENROUTER_API_KEY=sk-test
+run kimi HM=moonshotai/kimi-k2.7-code AUTH_MODE=openrouter OPENROUTER_API_KEY=sk-test
 CFG="$H_DIR/.kimi-code/config.toml"
 if [ -f "$CFG" ]; then
   # kimi resolves --model through an ALIAS, so default_model must be the alias and
   # the real id lives under [models.<alias>]. run-harness then passes no --model.
   grep -q 'default_model = "or-cheap"' "$CFG" \
     && pass "kimi: default_model is the alias" || bad "kimi alias"
-  grep -q 'model = "moonshotai/kimi-k2.6"' "$CFG" \
+  grep -q 'model = "moonshotai/kimi-k2.7-code"' "$CFG" \
     && pass "kimi: HM lands under the alias" || bad "kimi model"
   # The config holds a live provider key.
   PERM=$(ls -l "$CFG" | cut -c1-10)
@@ -129,10 +129,10 @@ if [ -f "$CFG" ]; then
 else bad "kimi: no config written"; fi
 
 # Moonshot key: the kimi-native alias pins Moonshot's own model id.
-run kimi HM=moonshotai/kimi-k2.6 AUTH_MODE=native-key MOONSHOT_API_KEY=sk-test
+run kimi HM=moonshotai/kimi-k2.7-code AUTH_MODE=native-key MOONSHOT_API_KEY=sk-test
 CFG="$H_DIR/.kimi-code/config.toml"
-{ grep -q 'default_model = "kimi-native"' "$CFG" && grep -q 'model = "kimi-k2.6"' "$CFG"; } 2>/dev/null \
-  && pass "kimi/native-key: kimi-native alias pins kimi-k2.6" || bad "kimi native-key model"
+{ grep -q 'default_model = "kimi-native"' "$CFG" && grep -q 'model = "kimi-k2.7-code"' "$CFG"; } 2>/dev/null \
+  && pass "kimi/native-key: kimi-native alias pins kimi-k2.7-code" || bad "kimi native-key model"
 
 run vibe HM=mistralai/mistral-medium-3-5 AUTH_MODE=openrouter OPENROUTER_API_KEY=sk-test
 CFG="$H_DIR/.vibe/config.toml"

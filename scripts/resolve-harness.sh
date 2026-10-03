@@ -176,7 +176,7 @@ case "$HARNESS" in
   codex) DEFAULT_HM="openai/gpt-6-luna" ;;              # codex's default (CODEX_MODELS[0])
   vibe)  DEFAULT_HM="mistralai/mistral-medium-3-5" ;;   # vibe's default (VIBE_MODELS[0])
   pi)    DEFAULT_HM="deepseek/deepseek-v4.1-flash" ;;   # pi's default (PI_MODELS[0])
-  kimi)  DEFAULT_HM="moonshotai/kimi-k2.6" ;;           # kimi's default (KIMI_MODELS[0])
+  kimi)  DEFAULT_HM="moonshotai/kimi-k2.7-code" ;;      # kimi's default (KIMI_MODELS[0])
   # Hermes' native provider and model are restored from HERMES_AUTH/config.yaml.
   # Passing a hardcoded model can switch the CLI to a different provider and
   # bypass the Nous Portal subscription, so let Hermes use its configured default.

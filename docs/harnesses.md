@@ -45,8 +45,8 @@ two models DeepSeek's own API serves: `deepseek-v4.1-flash` (default) and
 `deepseek-v4-pro` (older `deepseek-v4-flash` pins still dispatch); **hermes** runs
 its configured `default`, or `anthropic/claude-sonnet-5.5` / `openai/gpt-6.1-sol` as
 overrides; **kimi** is Moonshot, so it runs Moonshot's own Kimi family
-through OpenRouter: `moonshotai/kimi-k2.6` (default), `kimi-k3` (strongest, ~2×
-slower), `kimi-k2.7-code`, and the older `kimi-k2.5`. The scorer
+through OpenRouter: `moonshotai/kimi-k2.7-code` (default, code-tuned) and `kimi-k3`
+(strongest, ~2× slower; older `kimi-k2.6` and `kimi-k2.5` pins still dispatch). The scorer
 routes through the same harness the skill
 ran on, so a repo with **no** Claude credentials still gets every run scored.
 
@@ -97,8 +97,8 @@ through the same list, and `bin/onboard` checks it.
 | `fx` | 1. `AI_GATEWAY_API_KEY` - Vercel AI Gateway key (API key; [get](https://vercel.com/docs/ai-gateway), `./aeon auth --harness fx --key <key>`)<br>2. `VERCEL_OIDC_TOKEN` - Vercel OIDC token (OIDC token; [get](https://vercel.com/docs/oidc), `vercel env pull`) | the harness's own default |
 | `grok` | 1. `GROK_CREDENTIALS` - X account login (grok login) (login capture; [get](https://x.ai/grok), `./aeon auth --harness grok`)<br>2. `XAI_API_KEY` - xAI API key (API key; [get](https://console.x.ai), `./aeon auth --harness grok --key <xai-...>`) | `grok-4.7` |
 | `hermes` | 1. `HERMES_AUTH` - Nous Portal login (login capture; [get](https://portal.nousresearch.com), `./aeon auth --harness hermes`)<br>2. `OPENROUTER_API_KEY` - OpenRouter key (one key covers most harnesses) (API key; [get](https://openrouter.ai/settings/keys), `./aeon secrets set OPENROUTER_API_KEY --stdin`) | the harness's own default |
-| `kimi` | 1. `KIMI_AUTH` - Kimi (Moonshot) login (login capture; [get](https://www.kimi.com), `./aeon auth --harness kimi`)<br>2. `MOONSHOT_API_KEY` - Moonshot API key (API key; [get](https://platform.moonshot.ai/console/api-keys), `./aeon auth --harness kimi --key <sk-...>`)<br>3. `OPENROUTER_API_KEY` - OpenRouter key (one key covers most harnesses) (API key; [get](https://openrouter.ai/settings/keys), `./aeon secrets set OPENROUTER_API_KEY --stdin`) | `moonshotai/kimi-k2.6` |
-| `pi` | 1. `ANTHROPIC_API_KEY` - Anthropic API key (API key; [get](https://console.anthropic.com/settings/keys), `./aeon auth --harness pi --key <sk-ant-api...>`)<br>2. `ANTHROPIC_OAUTH_TOKEN` - Claude subscription token (login token; [get](https://claude.ai), `./aeon auth --harness pi --key <sk-ant-oat...>`)<br>3. `OPENAI_API_KEY` - OpenAI API key (API key; [get](https://platform.openai.com/api-keys), `./aeon auth --harness pi --key <sk-...>`)<br>4. `OPENROUTER_API_KEY` - OpenRouter key (one key covers most harnesses) (API key; [get](https://openrouter.ai/settings/keys), `./aeon secrets set OPENROUTER_API_KEY --stdin`) | `deepseek/deepseek-v4-flash` |
+| `kimi` | 1. `KIMI_AUTH` - Kimi (Moonshot) login (login capture; [get](https://www.kimi.com), `./aeon auth --harness kimi`)<br>2. `MOONSHOT_API_KEY` - Moonshot API key (API key; [get](https://platform.moonshot.ai/console/api-keys), `./aeon auth --harness kimi --key <sk-...>`)<br>3. `OPENROUTER_API_KEY` - OpenRouter key (one key covers most harnesses) (API key; [get](https://openrouter.ai/settings/keys), `./aeon secrets set OPENROUTER_API_KEY --stdin`) | `moonshotai/kimi-k2.7-code` |
+| `pi` | 1. `ANTHROPIC_API_KEY` - Anthropic API key (API key; [get](https://console.anthropic.com/settings/keys), `./aeon auth --harness pi --key <sk-ant-api...>`)<br>2. `ANTHROPIC_OAUTH_TOKEN` - Claude subscription token (login token; [get](https://claude.ai), `./aeon auth --harness pi --key <sk-ant-oat...>`)<br>3. `OPENAI_API_KEY` - OpenAI API key (API key; [get](https://platform.openai.com/api-keys), `./aeon auth --harness pi --key <sk-...>`)<br>4. `OPENROUTER_API_KEY` - OpenRouter key (one key covers most harnesses) (API key; [get](https://openrouter.ai/settings/keys), `./aeon secrets set OPENROUTER_API_KEY --stdin`) | `deepseek/deepseek-v4.1-flash` |
 | `vibe` | 1. `MISTRAL_API_KEY` - Mistral API key (API key; [get](https://console.mistral.ai/api-keys), `./aeon auth --harness vibe --key <key>`)<br>2. `OPENROUTER_API_KEY` - OpenRouter key (one key covers most harnesses) (API key; [get](https://openrouter.ai/settings/keys), `./aeon secrets set OPENROUTER_API_KEY --stdin`) | `mistralai/mistral-medium-3-5` |
 
 Notes: `GROK_CREDENTIALS` needs `GH_GLOBAL` (or the optional `GH_SECRETS_PAT`) to save its
@@ -317,8 +317,8 @@ effort: high       # low|medium|high|xhigh|max → --effort  (reasoning models o
 ```
 
 `effort`/`reasoning_effort` map to the API's `reasoningEffort`, honoured by
-`grok-4.7` (the default), `grok-4.6` and `grok-4.5`: the reasoning models the
-X-account login exposes to the CLI (see [Verification status](#verification-status);
+`grok-4.7` (the default) and `grok-4.6` (an older `grok-4.5` pin still works): the
+reasoning models the X-account login exposes to the CLI (see [Verification status](#verification-status);
 older xAI model ids are api.x.ai strings the CLI rejects as "unknown model id").
 
 `best_of_n` and `verify` used to map to `--best-of-n` / `--check`. grok 1.x

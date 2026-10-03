@@ -17,7 +17,9 @@ export const MODELS = [
 // X-account (GROK_CREDENTIALS) login exposes to the grok CLI's --model flag.
 // `grok models` on grok CLI 1.0.46 (verified 2026-10-01) lists grok-4.7 (its
 // default: the flagship reasoning model that powers Grok Build, multi-agent-capable;
-// the grok adapter passes --no-subagents in CI), grok-4.6 and grok-4.5.
+// the grok adapter passes --no-subagents in CI), grok-4.6 and grok-4.5. Only
+// grok-4.7 and grok-4.6 are offered; grok-4.5 stays a workflow_dispatch choice
+// so an existing pin still dispatches and renders via RETIRED_MODEL_LABELS.
 // Older api.x.ai ids (grok-composer-2.5-fast, grok-build, grok-build-0.1,
 // grok-4.3) are model *strings*, NOT valid CLI --model values on the X-account
 // OAuth login: the grok CLI rejects each with "unknown model id" (verified live
@@ -29,25 +31,23 @@ export const MODELS = [
 export const GROK_MODELS = [
   { id: 'grok-4.7', label: 'Grok 4.7' },
   { id: 'grok-4.6', label: 'Grok 4.6' },
-  { id: 'grok-4.5', label: 'Grok 4.5' },
 ]
 
 // kimi gets its own list: it bakes the selected id into a generic OpenRouter
 // provider config (`[providers.openrouter] type=openai`), so it drives ANY
-// OpenRouter model — and kimi IS Moonshot, so it runs Moonshot's own Kimi family
-// through OpenRouter (the way vibe runs Mistral and pi runs DeepSeek). K2.6 is the
-// default (newer and cheaper than K2.5 on OpenRouter), K3 is the strongest (higher
-// quality but ~2× slower), and K2.7-code is the code-tuned variant; K2.5 stays as
-// the prior default. k2.5/k3/k2.7-code measured working end-to-end 2026-07-23 on a
-// real runner (k2.5 4/5, k3 5/5, k2.7-code 4/5; slates cross-checked real). First
+// OpenRouter model, and kimi IS Moonshot, so it runs Moonshot's own Kimi family
+// through OpenRouter (the way vibe runs Mistral and pi runs DeepSeek). Only the
+// latest two are offered: K2.7-code is the default (code-tuned, same price as
+// K2.6) and K3 is the strongest (higher quality, ~2× slower and pricier). Both
+// measured working end-to-end 2026-07-23 on a real runner (k3 5/5, k2.7-code 4/5).
+// K2.6 and K2.5 are no longer offered but stay workflow_dispatch choices, so an
+// existing pin still dispatches and renders via RETIRED_MODEL_LABELS. First
 // entry is the default (modelsForHarness('kimi')[0] on harness switch)
 // — matched by aeon.yml's DEFAULT_HM. Any id here must also appear in the
 // workflow_dispatch `model` choice, or a dashboard dispatch of it 422s.
 export const KIMI_MODELS = [
-  { id: 'moonshotai/kimi-k2.6', label: 'Kimi K2.6' },
-  { id: 'moonshotai/kimi-k3', label: 'Kimi K3' },
   { id: 'moonshotai/kimi-k2.7-code', label: 'Kimi K2.7 Code' },
-  { id: 'moonshotai/kimi-k2.5', label: 'Kimi K2.5' },
+  { id: 'moonshotai/kimi-k3', label: 'Kimi K3' },
 ]
 
 // codex needs its own list. It fails DETERMINISTICALLY on gpt-5-nano (it emits a
@@ -147,6 +147,9 @@ const RETIRED_MODEL_LABELS: Record<string, string> = {
   'anthropic/claude-sonnet-4.6': 'Claude Sonnet 4.6',
   'openai/gpt-5.4': 'GPT-5.4',
   'google/gemini-2.5-pro': 'Gemini 2.5 Pro',
+  'grok-4.5': 'Grok 4.5',
+  'moonshotai/kimi-k2.6': 'Kimi K2.6',
+  'moonshotai/kimi-k2.5': 'Kimi K2.5',
 }
 
 // fx has no model picker: unlike codex/pi/vibe/kimi's OpenRouter path, fx's
