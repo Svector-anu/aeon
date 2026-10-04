@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated": "2026-10-02",
+  "updated": "2026-10-04",
   "description": "Machine-readable registry of community skill packs installable via bin/install-skill-pack. Mirrors the human-readable table in README.md.",
   "packs": [
     {
@@ -129,6 +129,24 @@
       "secrets_required": [],
       "capabilities": [
         "external_api",
+        "sends_notifications"
+      ]
+    },
+    {
+      "repo": "Svector-anu/aeon-messaging-pack",
+      "name": "Messaging Pack",
+      "description": "Weekly review of a product site's copy against a plain-language messaging playbook: rewrites for the worst problems, adoption tracking, and one new lesson learned from a reference site each run. Read-only; never edits the site.",
+      "author": "Svector-anu",
+      "license": "MIT",
+      "homepage": "https://github.com/Svector-anu/aeon-messaging-pack",
+      "category": "productivity",
+      "trust_level": "community",
+      "skills": [
+        "messaging-review"
+      ],
+      "secrets_required": [],
+      "capabilities": [
+        "read_only",
         "sends_notifications"
       ]
     }
