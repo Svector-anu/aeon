@@ -146,6 +146,7 @@
       ],
       "secrets_required": [],
       "capabilities": [
+        "read_only",
         "sends_notifications"
       ]
     }
