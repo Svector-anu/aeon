@@ -283,3 +283,4 @@ Community skill packs live in their own repos and install as one bundle. The aut
 | [aeon-skill-pack-spoolis](https://github.com/jsfranklin221/aeon-skill-pack-spoolis) | 1 | Verify delivered work against acceptance criteria: signed Outcome Receipt, per-unit earned value, chain verdict. Keyless sandbox. |
 | [aeon-skill-pack-claim-audit](https://github.com/richard7463/aeon-skill-pack-claim-audit) | 1 | Check whether what your instance reported is true: re-verify every claim at its source, grade E0-E4. |
 | [Messaging Pack](https://github.com/Svector-anu/aeon-messaging-pack) | 1 | Keep product copy plain and clear: weekly rewrites against a messaging playbook, adoption tracking, and one lesson a week from the best sites. Read-only. |
+| [Epoch Pack](https://github.com/Svector-anu/aeon-epoch-pack) | 4 | An engineering loop with receipts: spec, build, review and a readiness verdict, each pinned to one commit. Opens PRs, never merges. |
