@@ -153,7 +153,7 @@
     {
       "repo": "Svector-anu/aeon-epoch-pack",
       "name": "Epoch Pack",
-      "description": "An engineering loop with receipts: spec, build, review and a merge-readiness verdict, each pinned to one commit. Opens pull requests but never merges anything.",
+      "description": "Your unattended software engineer, running inside your Aeon instance: spec, build, review, prove and a merge-ready verdict, each pinned to one commit. Opens pull requests; you merge.",
       "author": "Svector-anu",
       "license": "MIT",
       "homepage": "https://github.com/Svector-anu/aeon-epoch-pack",
