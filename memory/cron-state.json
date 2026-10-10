@@ -8,5 +8,13 @@
     "consecutive_failures": 0,
     "success_rate": 1,
     "last_quality_score": 2
+  },
+  "auto-merge": {
+    "last_dispatch": "2026-10-10T16:18:24Z",
+    "last_status": "dispatched"
+  },
+  "heartbeat": {
+    "last_dispatch": "2026-10-10T16:18:24Z",
+    "last_status": "dispatched"
   }
 }
