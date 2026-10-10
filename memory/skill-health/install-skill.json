@@ -1,0 +1,16 @@
+{
+  "skill": "install-skill",
+  "last_analyzed": "2026-10-10T13:22:25Z",
+  "quality_score": 3,
+  "assessment": "Correct, honest output on a legitimate blocker—skill hit a permission denial, chose not to bypass security, and clearly reported next steps.",
+  "flags": [],
+  "avg_score": 3,
+  "history": [
+    {
+      "date": "2026-10-10",
+      "score": 3,
+      "ts": "2026-10-10T13:22:25Z",
+      "harness": "claude"
+    }
+  ]
+}
