@@ -1,0 +1,105 @@
+{
+  "root": "card",
+  "state": {},
+  "elements": {
+    "card": {
+      "type": "Card",
+      "props": {
+        "title": "Heartbeat: auto-merge"
+      },
+      "children": [
+        "main-stack"
+      ]
+    },
+    "main-stack": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "md"
+      },
+      "children": [
+        "header-stack",
+        "stats-stack",
+        "timeline-stack",
+        "diagnosis"
+      ]
+    },
+    "header-stack": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "sm"
+      },
+      "children": [
+        "status-badge"
+      ]
+    },
+    "status-badge": {
+      "type": "Badge",
+      "props": {
+        "text": "🔴 FAILED",
+        "variant": "destructive"
+      }
+    },
+    "stats-stack": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "lg"
+      },
+      "children": [
+        "failures-stat",
+        "success-rate-stat"
+      ]
+    },
+    "failures-stat": {
+      "type": "Stat",
+      "props": {
+        "label": "Consecutive failures",
+        "value": "3",
+        "trend": "down"
+      }
+    },
+    "success-rate-stat": {
+      "type": "Stat",
+      "props": {
+        "label": "Success rate",
+        "value": "25%",
+        "trend": "down"
+      }
+    },
+    "timeline-stack": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "last-failure-text",
+        "last-success-text"
+      ]
+    },
+    "last-failure-text": {
+      "type": "Text",
+      "props": {
+        "text": "Last failure: 2026-10-11 23:07 UTC",
+        "variant": "caption"
+      }
+    },
+    "last-success-text": {
+      "type": "Text",
+      "props": {
+        "text": "Last success: 2026-10-10 16:19 UTC",
+        "variant": "caption"
+      }
+    },
+    "diagnosis": {
+      "type": "Alert",
+      "props": {
+        "title": "Diagnosis",
+        "message": "Likely harness/API issue. Check the latest run logs.",
+        "type": "error"
+      }
+    }
+  }
+}
