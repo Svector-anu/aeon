@@ -6,3 +6,4 @@ date,skill,model,input_tokens,output_tokens,cache_read,cache_creation
 2026-10-11,heartbeat,claude-sonnet-5-5,12,1827,184827,26262
 2026-10-12,heartbeat,claude-sonnet-5-5,14,2668,224899,27236
 2026-10-12,auto-merge,claude-sonnet-5-5,16,1621,223015,20025
+2026-10-12,aeon-update,claude-sonnet-5-5,14,1858,234398,28607

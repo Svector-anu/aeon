@@ -1,0 +1,21 @@
+{
+  "root": "card",
+  "state": {},
+  "elements": {
+    "card": {
+      "type": "Card",
+      "props": {
+        "title": "aeon-update"
+      },
+      "children": [
+        "message"
+      ]
+    },
+    "message": {
+      "type": "Text",
+      "props": {
+        "text": "baseline initialized at 2cd951a; future runs sync from here"
+      }
+    }
+  }
+}
