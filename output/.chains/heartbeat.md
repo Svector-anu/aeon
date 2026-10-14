@@ -1,12 +1,13 @@
-The ambient heartbeat ran. The status page reads 🔴 DEGRADED, and I sent no notification.
+**Heartbeat (ambient), 2026-10-14: 🟡 WATCH.** I sent no notification because nothing needs action.
 
-**Why degraded:** `auto-merge` has a 40% success rate over 5 runs, which trips the chronic-failure rule (below 50% with at least 5 runs). It has recovered since its last failure: it succeeded on 2026-10-12 19:15 UTC and has 0 consecutive failures.
-
-**Why no notification:** the `auto-merge` failures were already reported on 2026-10-12, within the 48-hour window.
-
-**Other checks:** there are no open PRs, no urgent issues, no open memory issues and no flagged memory items. `heartbeat` and `aeon-update` are both at 100%. `auto-workflow` is on-demand and hasn't run yet.
+- **Failed or stuck skills:** none. The latest run of every enabled skill succeeded.
+- **auto-merge:** it failed on 2026-10-11 and has since recovered, with 0 consecutive failures. Its success rate is 50% over 6 runs, which is not below the chronic-failure threshold of 50%. It stays on watch because of that history.
+- **PRs and issues:** no open PRs, no urgent issues, and no open memory issues.
+- **Memory flags:** `memory/MEMORY.md` has nothing needing follow-up.
+- **Not yet run:** `auto-workflow` is on-demand and hasn't been run.
+- **Token pulse:** I left this section out because there is no token-report file.
 
 ## Summary
-- Rewrote `docs/status.md` with the current fleet health (next scheduled run: `auto-merge` at 14:00 UTC).
-- Created `memory/logs/2026-10-13.md` with the heartbeat entry.
-- Follow-up: the `auto-merge` rate stays below 50% until it has a few more successful runs. It runs next at 14:00 UTC today.
+- Rewrote `docs/status.md` with the 🟡 WATCH verdict. The next scheduled run is auto-merge at 14:00 UTC.
+- Created `memory/logs/2026-10-14.md` with the heartbeat entry.
+- No follow-up is needed.
