@@ -1,8 +1,8 @@
 {
   "skill": "auto-merge",
-  "last_analyzed": "2026-10-13T15:53:11Z",
+  "last_analyzed": "2026-10-14T14:43:04Z",
   "quality_score": 4,
-  "assessment": "Correctly executed skill with specific, verifiable output and actionable follow-up on what operator needs to do to enable auto-merges.",
+  "assessment": "Substantive, verifiable execution: checked 2 real PRs, provided specific verdicts with reasons, correctly skipped notify (aligns with 'signal only' principle), and surfaced actionable guidance (how to add trusted authors).",
   "flags": [],
   "avg_score": 4,
   "history": [
@@ -22,6 +22,12 @@
       "date": "2026-10-13",
       "score": 4,
       "ts": "2026-10-13T15:53:11Z",
+      "harness": "claude"
+    },
+    {
+      "date": "2026-10-14",
+      "score": 4,
+      "ts": "2026-10-14T14:43:04Z",
       "harness": "claude"
     }
   ]

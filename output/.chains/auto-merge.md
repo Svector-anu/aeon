@@ -1,11 +1,13 @@
-Auto-merge merged nothing this run, because none of the 11 open PRs on aeonfun/aeon passed the author allowlist.
+Auto-merge merged nothing this run. Neither of the two open PRs on aeonfun/aeon passed the safety policy.
 
-- **#1200–#1210 (10 PRs):** all by `Svector-anu`, who isn't on the allowlist. `memory/watched-repos.md` has no `## Trusted Authors` section, so only `dependabot[bot]`, `renovate[bot]` and `github-actions[bot]` are eligible. CI is green on all of them, and they are small and target `main`.
-- **#1181:** by `aaronjmars`, also not allowlisted, and it's a draft.
+| PR | Author | Verdict |
+|----|--------|---------|
+| #1218 "fix(vuln-poc-gate)…" | Svector-anu | `SKIP:author-not-allowlisted:Svector-anu`. Its other gates pass: CI green, CLEAN, +63/-3. |
+| #1181 "feat(plugin): 0.2.0…" | aaronjmars | `SKIP:author-not-allowlisted:aaronjmars`. It is also a draft. |
 
-No merges, queued PRs or retry-cap hits, so I sent no notification. I appended the `### auto-merge` entry to `memory/logs/2026-10-13.md`. I did not write `memory/topics/auto-merge-state.json`, since nothing was attempted. Its `last_run` still reads 2026-10-12.
+I sent no notification, since nothing merged and no PR hit the retry cap. If you want #1218 to merge on green CI, add `Svector-anu` under a `## Trusted Authors` section in `memory/watched-repos.md`.
 
 ## Summary
-- Checked all 11 open PRs against the safety policy. All 11 skipped as `SKIP:author-not-allowlisted`.
-- Modified `memory/logs/2026-10-13.md`.
-- Follow-up: to have these PRs merged automatically, add `Svector-anu` under `## Trusted Authors` in `memory/watched-repos.md`. That is the operator's call.
+- Checked 2 open PRs. Merged=0, queued=0, retry-capped=0.
+- Updated `memory/topics/auto-merge-state.json` (`last_run` set, no PR entries).
+- Appended the `### auto-merge` entry to `memory/logs/2026-10-14.md`.

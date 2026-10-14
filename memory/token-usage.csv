@@ -10,3 +10,4 @@ date,skill,model,input_tokens,output_tokens,cache_read,cache_creation
 2026-10-13,heartbeat,claude-sonnet-5-5,14,2434,224834,27373
 2026-10-13,auto-merge,claude-sonnet-5-5,12,1375,178813,29004
 2026-10-14,heartbeat,claude-sonnet-5-5,12,2330,212889,35666
+2026-10-14,auto-merge,claude-sonnet-5-5,14,1656,197978,21957
