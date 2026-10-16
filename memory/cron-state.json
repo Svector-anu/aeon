@@ -11,16 +11,16 @@
   },
   "auto-merge": {
     "last_dispatch": "2026-10-16T17:19:51Z",
-    "last_status": "dispatched",
+    "last_status": "failed",
     "last_success": "2026-10-14T14:43:06Z",
-    "total_runs": 10,
+    "total_runs": 11,
     "total_successes": 4,
-    "total_failures": 6,
-    "consecutive_failures": 3,
-    "success_rate": 0.4,
+    "total_failures": 7,
+    "consecutive_failures": 4,
+    "success_rate": 0.36,
     "last_quality_score": 4,
-    "last_failed": "2026-10-15T21:44:32Z",
-    "last_error": "user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concurrency_limit\":0,\"budget\":0},\"by_type\":{}},\"is_error\":true,\"num_turns\":1,\"subtype\":\"success\",\"api_error_status\":403,\"api_error_code\":\"oauth_not_allo"
+    "last_failed": "2026-10-16T17:20:17Z",
+    "last_error": "round\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"concu"
   },
   "heartbeat": {
     "last_dispatch": "2026-10-16T13:01:07Z",
