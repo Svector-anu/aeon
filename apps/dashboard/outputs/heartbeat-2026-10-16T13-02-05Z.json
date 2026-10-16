@@ -1,0 +1,160 @@
+{
+  "root": "card-main",
+  "state": {},
+  "elements": {
+    "card-main": {
+      "type": "Card",
+      "props": {
+        "title": "Heartbeat Skill Status"
+      },
+      "children": [
+        "alert-critical",
+        "separator-1",
+        "section-failures"
+      ]
+    },
+    "alert-critical": {
+      "type": "Alert",
+      "props": {
+        "title": "🔴 FAILED (3 consecutive failures)",
+        "message": "API 403 `oauth_not_allowed` — the harness OAuth credential is being rejected. Check the Claude auth secret (token expired or not permitted for this use).",
+        "type": "error"
+      }
+    },
+    "separator-1": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "section-failures": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "md"
+      },
+      "children": [
+        "failures-title",
+        "failure-auto-merge",
+        "failure-heartbeat",
+        "error-details"
+      ]
+    },
+    "failures-title": {
+      "type": "Heading",
+      "props": {
+        "text": "Failing Skills",
+        "level": "h3"
+      }
+    },
+    "failure-auto-merge": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "auto-merge-name",
+        "auto-merge-details"
+      ]
+    },
+    "auto-merge-name": {
+      "type": "Text",
+      "props": {
+        "text": "auto-merge",
+        "variant": "lead"
+      }
+    },
+    "auto-merge-details": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "auto-merge-last-failed",
+        "auto-merge-success-rate"
+      ]
+    },
+    "auto-merge-last-failed": {
+      "type": "Text",
+      "props": {
+        "text": "Last failed: 2026-10-15 21:44 UTC",
+        "variant": "caption"
+      }
+    },
+    "auto-merge-success-rate": {
+      "type": "Stat",
+      "props": {
+        "label": "Success Rate",
+        "value": "40%"
+      }
+    },
+    "failure-heartbeat": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "heartbeat-name",
+        "heartbeat-details"
+      ]
+    },
+    "heartbeat-name": {
+      "type": "Text",
+      "props": {
+        "text": "heartbeat",
+        "variant": "lead"
+      }
+    },
+    "heartbeat-details": {
+      "type": "Text",
+      "props": {
+        "text": "Last failed: 2026-10-15 18:34 UTC",
+        "variant": "caption"
+      }
+    },
+    "error-details": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "error-title",
+        "error-code",
+        "error-message",
+        "error-cause"
+      ]
+    },
+    "error-title": {
+      "type": "Heading",
+      "props": {
+        "text": "Root Cause",
+        "level": "h4"
+      }
+    },
+    "error-code": {
+      "type": "Badge",
+      "props": {
+        "text": "API 403",
+        "variant": "destructive"
+      }
+    },
+    "error-message": {
+      "type": "Text",
+      "props": {
+        "text": "oauth_not_allowed",
+        "variant": "body"
+      }
+    },
+    "error-cause": {
+      "type": "Text",
+      "props": {
+        "text": "The harness OAuth credential is being rejected. The Claude auth secret may be expired or not permitted for this use.",
+        "variant": "body"
+      }
+    }
+  }
+}
