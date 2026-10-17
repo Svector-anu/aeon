@@ -1,13 +1,14 @@
-Auto-merge merged nothing this run. Neither of the two open PRs on aeonfun/aeon passed the safety policy.
+No PRs were merged this run. Both open PRs on aeonfun/aeon failed the author allowlist, so I sent no notification.
 
 | PR | Author | Verdict |
-|----|--------|---------|
-| #1218 "fix(vuln-poc-gate)…" | Svector-anu | `SKIP:author-not-allowlisted:Svector-anu`. Its other gates pass: CI green, CLEAN, +63/-3. |
-| #1181 "feat(plugin): 0.2.0…" | aaronjmars | `SKIP:author-not-allowlisted:aaronjmars`. It is also a draft. |
+|---|---|---|
+| #1240 "docs(packs): list the Cohesivity pack" | AragAgg | `SKIP:author-not-allowlisted:AragAgg`. It also comes from a fork, its merge state is BLOCKED, and it needs review. |
+| #1181 "feat(plugin): 0.2.0 - connect to the hosted Aeon MCP server" | aaronjmars | `SKIP:author-not-allowlisted:aaronjmars`. It also needs review, and its merge state was still UNKNOWN. I didn't retry that, since the author check already ruled it out. |
 
-I sent no notification, since nothing merged and no PR hit the retry cap. If you want #1218 to merge on green CI, add `Svector-anu` under a `## Trusted Authors` section in `memory/watched-repos.md`.
+- **Allowlist:** `memory/watched-repos.md` has no `## Trusted Authors` section, so only the three bot logins are eligible. Adding the operator's login there would make #1181 eligible once it has the review it needs.
+- **Earlier failures:** Heartbeat reported auto-merge failing four times in a row, with a 403 `oauth_not_allowed` API error. This run's `gh` calls worked, but no merge was attempted, so the merge permission is still untested.
 
 ## Summary
-- Checked 2 open PRs. Merged=0, queued=0, retry-capped=0.
-- Updated `memory/topics/auto-merge-state.json` (`last_run` set, no PR entries).
-- Appended the `### auto-merge` entry to `memory/logs/2026-10-14.md`.
+- Checked 2 open PRs on aeonfun/aeon: merged=0, queued=0, retry_capped=0.
+- Updated `memory/logs/2026-10-17.md` with the auto-merge entry and `memory/topics/auto-merge-state.json` with the new `last_run`.
+- Follow-up: add a `## Trusted Authors` section if you want human or agent PRs to auto-merge, and look into the earlier 403 failures.
