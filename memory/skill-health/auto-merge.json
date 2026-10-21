@@ -1,8 +1,8 @@
 {
   "skill": "auto-merge",
-  "last_analyzed": "2026-10-18T16:49:27Z",
+  "last_analyzed": "2026-10-21T17:35:57Z",
   "quality_score": 4,
-  "assessment": "Substantive, well-structured execution: skill correctly evaluated 4 real PRs, applied allowlist logic, reported truthful no-op result, followed notification discipline, updated state files, and provided actionable next step.",
+  "assessment": "Substantive, specific output with clear policy application; concrete PR numbers and reasons are verifiable; correctly applied no-notification rule for no-merge run; identified actionable follow-up (trusted author list).",
   "flags": [],
   "avg_score": 4,
   "history": [
@@ -40,6 +40,12 @@
       "date": "2026-10-18",
       "score": 4,
       "ts": "2026-10-18T16:49:27Z",
+      "harness": "claude"
+    },
+    {
+      "date": "2026-10-21",
+      "score": 4,
+      "ts": "2026-10-21T17:35:57Z",
       "harness": "claude"
     }
   ]

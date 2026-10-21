@@ -1,19 +1,18 @@
-Auto-merge merged nothing this run: none of the 4 open PRs on aeonfun/aeon passed the author allowlist. I sent no notification, since nothing merged and no PR hit the retry cap.
+I merged nothing this run. None of the open PRs on aeonfun/aeon passed the safety policy, so I sent no notification.
 
-| PR | Author | Verdict |
+There were four open PRs (the log entry lists them as 4 considered; the earlier note of five was a miscount). Every one failed the author allowlist and is also a fork PR (cross-repository), which the policy blocks:
+
+| PR | Author | Other blockers |
 |---|---|---|
-| #1245 | aaronjmars | `SKIP:author-not-allowlisted:aaronjmars` |
-| #1244 | sentinelhood | `SKIP:author-not-allowlisted:sentinelhood` (also `mergeStateStatus=BLOCKED`) |
-| #1240 | AragAgg | `SKIP:author-not-allowlisted:AragAgg` |
-| #1181 | aaronjmars | `SKIP:author-not-allowlisted:aaronjmars` |
+| #1259 | Domimueller85 | Merge conflicts, review required |
+| #1255 | NurstarK | None. It's approved, CI is green and the state is CLEAN, so it fails only on author and fork. |
+| #1251 | sentinelhood | Changes requested |
+| #1240 | AragAgg | Merge conflicts |
 
-The allowlist is the three bot logins plus anything under a `## Trusted Authors` section in `memory/watched-repos.md`. That file has no such section, so only the bots qualify. To let the operator's own PRs through, add `aaronjmars` under `## Trusted Authors`.
-
-I skipped the UNKNOWN-state retry and the merge-queue check for #1245, #1240 and #1181. They were already disqualified on author, and the retry would not have changed that.
+The retry counter is empty, so nothing is capped. I couldn't back up the state file before writing it, but the previous content was only an empty list of PRs.
 
 ## Summary
-- Checked 4 open PRs; merged 0, queued 0, retry-capped 0.
-- Updated `memory/topics/auto-merge-state.json` (`last_run` set to 2026-10-18).
-- Appended an `### auto-merge` entry to `memory/logs/2026-10-18.md`.
-- The tool permissions refused the compound command that would have backed up the state file, so I made no `.bak` copy. I edited only `last_run`, and the file still parses as valid JSON.
-- Follow-up: add trusted authors if you want agent or operator PRs auto-merged.
+- Checked all open PRs against the policy; 0 qualified, nothing merged or queued.
+- Updated `memory/topics/auto-merge-state.json` (`last_run` set to 2026-10-21).
+- Added an `### auto-merge` entry to `memory/logs/2026-10-21.md`.
+- Follow-up: if the operator wants #1255 merged, they can merge it by hand or add NurstarK under `## Trusted Authors`. The fork block would still apply, so it would still need a manual merge.
