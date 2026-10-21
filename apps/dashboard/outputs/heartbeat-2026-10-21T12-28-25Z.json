@@ -1,0 +1,279 @@
+{
+  "root": "card-main",
+  "state": {},
+  "elements": {
+    "card-main": {
+      "type": "Card",
+      "props": {
+        "title": "Heartbeat",
+        "description": "Skill health status"
+      },
+      "children": [
+        "alert-critical",
+        "separator-1",
+        "failures-stack"
+      ]
+    },
+    "alert-critical": {
+      "type": "Alert",
+      "props": {
+        "title": "Critical: Multiple Skill Failures",
+        "message": "Shared error signature across all failures points to common harness or API dependency issue, not per-skill bugs",
+        "type": "error"
+      }
+    },
+    "separator-1": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "failures-stack": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "lg"
+      },
+      "children": [
+        "failure-auto-merge",
+        "failure-aeon-update",
+        "failure-heartbeat",
+        "diagnostic-section"
+      ]
+    },
+    "failure-auto-merge": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "header-auto-merge",
+        "metrics-auto-merge"
+      ]
+    },
+    "header-auto-merge": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "sm"
+      },
+      "children": [
+        "title-auto-merge",
+        "badge-failed-1"
+      ]
+    },
+    "title-auto-merge": {
+      "type": "Heading",
+      "props": {
+        "text": "auto-merge",
+        "level": "h3"
+      }
+    },
+    "badge-failed-1": {
+      "type": "Badge",
+      "props": {
+        "text": "Failed",
+        "variant": "destructive"
+      }
+    },
+    "metrics-auto-merge": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "md"
+      },
+      "children": [
+        "stat-consecutive-1",
+        "stat-success-1",
+        "stat-lastrun-1"
+      ]
+    },
+    "stat-consecutive-1": {
+      "type": "Stat",
+      "props": {
+        "label": "Consecutive Failures",
+        "value": "4"
+      }
+    },
+    "stat-success-1": {
+      "type": "Stat",
+      "props": {
+        "label": "Success Rate",
+        "value": "35%",
+        "trend": "down"
+      }
+    },
+    "stat-lastrun-1": {
+      "type": "Stat",
+      "props": {
+        "label": "Last Run",
+        "value": "2026-10-20 17:19 UTC"
+      }
+    },
+    "failure-aeon-update": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "header-aeon-update",
+        "metrics-aeon-update"
+      ]
+    },
+    "header-aeon-update": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "sm"
+      },
+      "children": [
+        "title-aeon-update",
+        "badge-failed-2"
+      ]
+    },
+    "title-aeon-update": {
+      "type": "Heading",
+      "props": {
+        "text": "aeon-update",
+        "level": "h3"
+      }
+    },
+    "badge-failed-2": {
+      "type": "Badge",
+      "props": {
+        "text": "Failed",
+        "variant": "destructive"
+      }
+    },
+    "metrics-aeon-update": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "md"
+      },
+      "children": [
+        "stat-consecutive-2",
+        "stat-success-2",
+        "stat-lastrun-2"
+      ]
+    },
+    "stat-consecutive-2": {
+      "type": "Stat",
+      "props": {
+        "label": "Consecutive Failures",
+        "value": "3"
+      }
+    },
+    "stat-success-2": {
+      "type": "Stat",
+      "props": {
+        "label": "Success Rate",
+        "value": "25%",
+        "trend": "down"
+      }
+    },
+    "stat-lastrun-2": {
+      "type": "Stat",
+      "props": {
+        "label": "Last Run",
+        "value": "2026-10-19 23:09 UTC"
+      }
+    },
+    "failure-heartbeat": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "header-heartbeat",
+        "metrics-heartbeat"
+      ]
+    },
+    "header-heartbeat": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "sm"
+      },
+      "children": [
+        "title-heartbeat",
+        "badge-failed-3"
+      ]
+    },
+    "title-heartbeat": {
+      "type": "Heading",
+      "props": {
+        "text": "heartbeat",
+        "level": "h3"
+      }
+    },
+    "badge-failed-3": {
+      "type": "Badge",
+      "props": {
+        "text": "Failed",
+        "variant": "destructive"
+      }
+    },
+    "metrics-heartbeat": {
+      "type": "Stack",
+      "props": {
+        "direction": "horizontal",
+        "gap": "md"
+      },
+      "children": [
+        "stat-consecutive-3",
+        "stat-lastrun-3"
+      ]
+    },
+    "stat-consecutive-3": {
+      "type": "Stat",
+      "props": {
+        "label": "Consecutive Failures",
+        "value": "4"
+      }
+    },
+    "stat-lastrun-3": {
+      "type": "Stat",
+      "props": {
+        "label": "Last Run",
+        "value": "2026-10-20 12:17 UTC"
+      }
+    },
+    "diagnostic-section": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "diagnostic-heading",
+        "error-signature-text",
+        "issues-filed-text"
+      ]
+    },
+    "diagnostic-heading": {
+      "type": "Heading",
+      "props": {
+        "text": "Root Cause Analysis",
+        "level": "h4"
+      }
+    },
+    "error-signature-text": {
+      "type": "Text",
+      "props": {
+        "text": "Shared error signature: harness/background-task stats blob",
+        "variant": "body"
+      }
+    },
+    "issues-filed-text": {
+      "type": "Text",
+      "props": {
+        "text": "No open issues filed in memory/issues",
+        "variant": "muted"
+      }
+    }
+  }
+}
