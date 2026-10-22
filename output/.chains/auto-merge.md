@@ -1,18 +1,15 @@
-I merged nothing this run. None of the open PRs on aeonfun/aeon passed the safety policy, so I sent no notification.
+No PRs were merged this run: none of the 4 open PRs on aeonfun/aeon passed the safety policy. I sent no notification, since nothing merged and nothing hit the retry cap.
 
-There were four open PRs (the log entry lists them as 4 considered; the earlier note of five was a miscount). Every one failed the author allowlist and is also a fork PR (cross-repository), which the policy blocks:
+| PR | Verdict |
+|---|---|
+| #1264 (dependabot, bump next) | `SKIP:mergeStateStatus=BLOCKED` |
+| #1255 (NurstarK) | `SKIP:author-not-allowlisted:NurstarK` |
+| #1251 (sentinelhood) | `SKIP:author-not-allowlisted:sentinelhood` |
+| #1240 (AragAgg) | `SKIP:author-not-allowlisted:AragAgg` |
 
-| PR | Author | Other blockers |
-|---|---|---|
-| #1259 | Domimueller85 | Merge conflicts, review required |
-| #1255 | NurstarK | None. It's approved, CI is green and the state is CLEAN, so it fails only on author and fork. |
-| #1251 | sentinelhood | Changes requested |
-| #1240 | AragAgg | Merge conflicts |
-
-The retry counter is empty, so nothing is capped. I couldn't back up the state file before writing it, but the previous content was only an empty list of PRs.
+#1255 and #1240 showed `UNKNOWN` merge state, but I didn't re-query them because their authors already disqualify them. I also skipped the merge-queue check, since no PR got far enough for it to matter.
 
 ## Summary
-- Checked all open PRs against the policy; 0 qualified, nothing merged or queued.
-- Updated `memory/topics/auto-merge-state.json` (`last_run` set to 2026-10-21).
-- Added an `### auto-merge` entry to `memory/logs/2026-10-21.md`.
-- Follow-up: if the operator wants #1255 merged, they can merge it by hand or add NurstarK under `## Trusted Authors`. The fork block would still apply, so it would still need a manual merge.
+- Reviewed 4 open PRs on aeonfun/aeon; merged 0, queued 0, retry-capped 0.
+- Files modified: `memory/topics/auto-merge-state.json` (`last_run` updated) and `memory/logs/2026-10-22.md` (added the auto-merge entry).
+- Follow-up: #1264 is blocked, likely by a required check or review. A maintainer should look at it.
