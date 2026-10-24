@@ -1,14 +1,16 @@
-Auto-merge merged nothing this run. All three open PRs on `aeonfun/aeon` were skipped, and I sent no notification because nothing merged and no PR hit the retry cap.
+Auto-merge merged nothing this run. None of the three open PRs on aeonfun/aeon qualified, so I sent no notification.
 
-| PR | Author | Verdict |
+| PR | Author | Reason skipped |
 |---|---|---|
-| #1255 lazybrief | NurstarK | `SKIP:author-not-allowlisted:NurstarK`. It is also a fork PR, though CI is green and it is approved. |
-| #1251 onchain-monitor reorg-safe evidence replay | sentinelhood | `SKIP:author-not-allowlisted:sentinelhood`. It is also a fork PR, `BLOCKED`, and has `CHANGES_REQUESTED`. |
-| #1240 Cohesivity pack docs | AragAgg | `SKIP:author-not-allowlisted:AragAgg`. It is also a fork PR, in conflict (`DIRTY`), and has only the GitGuardian check. |
+| #1266 onchain-monitor receipts | sentinelhood | Author not allowlisted. It is also a fork PR, with a review required and the state blocked. |
+| #1255 lazybrief skill | NurstarK | Author not allowlisted. It is also a fork PR, though CI is green and it is approved. |
+| #1240 Cohesivity pack docs | AragAgg | Author not allowlisted. It is also a fork PR, and it has merge conflicts. |
 
-The totals were merged=0, queued=0, qualified=0, considered=3, retry_capped=0. The run was live, not dry-run. I didn't run the merge-queue lookup because no PR got past the author, fork, and state gates.
+**Skip breakdown:** `AUTO_MERGE_SKIP: 0/3 qualifying (blocked=1 author-blocked=3)`. No PR is near the retry cap.
 
 ## Summary
-- Evaluated 3 open PRs against the safety policy. None qualified, because all three authors are outside the allowlist and all three are fork PRs.
-- I updated `memory/logs/2026-10-23.md` with the `### auto-merge` entry and set `last_run` in `memory/topics/auto-merge-state.json`.
-- No follow-up is needed unless the operator wants to merge #1255, which is approved and green. Merging it would mean a manual merge, or adding the author under `## Trusted Authors` in `memory/watched-repos.md`. The fork block would still apply.
+- Checked the 3 open PRs on aeonfun/aeon against the safety policy. There were no merges, no queued PRs and no retry-cap hits.
+- Updated `memory/topics/auto-merge-state.json` (`last_run`) and added an `### auto-merge` entry to `memory/logs/2026-10-24.md`.
+- **Follow-up:**
+  - #1255 is the only PR that looks mergeable by hand.
+  - To auto-merge fork PRs, an operator would have to add the author under `## Trusted Authors`. The fork block would still apply.
