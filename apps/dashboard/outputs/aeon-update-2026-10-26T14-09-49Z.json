@@ -1,0 +1,223 @@
+{
+  "root": "card_main",
+  "state": {},
+  "elements": {
+    "card_main": {
+      "type": "Card",
+      "props": {
+        "title": "aeon-update",
+        "description": "Synced 63 upstream commits from aeonfun/aeon → PR"
+      },
+      "children": [
+        "stack_main"
+      ]
+    },
+    "stack_main": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "md"
+      },
+      "children": [
+        "grid_stats",
+        "sep1",
+        "heading_new",
+        "stack_new",
+        "sep2",
+        "heading_manual",
+        "stack_manual",
+        "sep3",
+        "link_pr"
+      ]
+    },
+    "grid_stats": {
+      "type": "Grid",
+      "props": {
+        "columns": 4,
+        "gap": "md"
+      },
+      "children": [
+        "stat_commits",
+        "stat_files",
+        "stat_reviewed",
+        "stat_merged"
+      ]
+    },
+    "stat_commits": {
+      "type": "Stat",
+      "props": {
+        "label": "Upstream Commits",
+        "value": "63"
+      }
+    },
+    "stat_files": {
+      "type": "Stat",
+      "props": {
+        "label": "Files Applied",
+        "value": "127"
+      }
+    },
+    "stat_reviewed": {
+      "type": "Stat",
+      "props": {
+        "label": "Need Review",
+        "value": "25"
+      }
+    },
+    "stat_merged": {
+      "type": "Stat",
+      "props": {
+        "label": "Auto-merged",
+        "value": "20"
+      }
+    },
+    "sep1": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "heading_new": {
+      "type": "Heading",
+      "props": {
+        "text": "New Additions",
+        "level": "h3"
+      }
+    },
+    "stack_new": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "text_new1",
+        "text_new2",
+        "text_new3",
+        "text_new4"
+      ]
+    },
+    "text_new1": {
+      "type": "Text",
+      "props": {
+        "text": "scripts/aeon_update.py",
+        "variant": "body"
+      }
+    },
+    "text_new2": {
+      "type": "Text",
+      "props": {
+        "text": "langfuse scoring",
+        "variant": "body"
+      }
+    },
+    "text_new3": {
+      "type": "Text",
+      "props": {
+        "text": "OpenRouter attribution",
+        "variant": "body"
+      }
+    },
+    "text_new4": {
+      "type": "Text",
+      "props": {
+        "text": "onchain-monitor evidence verify",
+        "variant": "body"
+      }
+    },
+    "sep2": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "heading_manual": {
+      "type": "Heading",
+      "props": {
+        "text": "Manual Review Required",
+        "level": "h3"
+      }
+    },
+    "stack_manual": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "md"
+      },
+      "children": [
+        "stat_held",
+        "heading_conflicts",
+        "stack_conflicts",
+        "text_reason"
+      ]
+    },
+    "stat_held": {
+      "type": "Stat",
+      "props": {
+        "label": "Workflow Updates Held Back",
+        "value": "14"
+      }
+    },
+    "heading_conflicts": {
+      "type": "Heading",
+      "props": {
+        "text": "Files with Conflicts",
+        "level": "h4"
+      }
+    },
+    "stack_conflicts": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "sm"
+      },
+      "children": [
+        "text_conflict1",
+        "text_conflict2",
+        "text_conflict3"
+      ]
+    },
+    "text_conflict1": {
+      "type": "Text",
+      "props": {
+        "text": ".github/workflows/aeon.yml",
+        "variant": "body"
+      }
+    },
+    "text_conflict2": {
+      "type": "Text",
+      "props": {
+        "text": "skills/aeon-update/SKILL.md",
+        "variant": "body"
+      }
+    },
+    "text_conflict3": {
+      "type": "Text",
+      "props": {
+        "text": "skill-packs registry",
+        "variant": "body"
+      }
+    },
+    "text_reason": {
+      "type": "Text",
+      "props": {
+        "text": "Reason: Token lacks `workflows` permission",
+        "variant": "caption"
+      }
+    },
+    "sep3": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "link_pr": {
+      "type": "StoryLink",
+      "props": {
+        "title": "View Pull Request #5",
+        "href": "https://github.com/Svector-anu/aeon/pull/5",
+        "source": "GitHub"
+      }
+    }
+  }
+}
