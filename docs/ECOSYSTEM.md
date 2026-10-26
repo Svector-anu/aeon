@@ -20,7 +20,7 @@ These are the projects we know of that run Aeon, extend it, or integrate with th
 | <img src="https://pbs.twimg.com/profile_images/2056143519824166912/W2VGsyMX_400x400.jpg" width="36" height="36" alt="aeonbook logo"> | aeonbook | [@aeonbook_](https://x.com/aeonbook_) |
 | <img src="https://pbs.twimg.com/profile_images/2002059513524789249/mzJQc1tX_400x400.png" width="36" height="36" alt="AgentLink logo"> | AgentLink | [@agentlinkhq](https://x.com/agentlinkhq) · [agentlink.id](https://agentlink.id) |
 | <img src="https://pbs.twimg.com/profile_images/2076592848452145152/9xUQBtzv_400x400.jpg" width="36" height="36" alt="AgentOS logo"> | AgentOS | [@useAgentOS](https://x.com/useAgentOS) |
-| <img src="https://pbs.twimg.com/profile_images/2021447689398030336/eY9wm4_X_400x400.png" width="36" height="36" alt="AI2Human logo"> | AI2Human | [@ai2humannetwork](https://x.com/ai2humannetwork) · [ai2human.io](https://ai2human.io) |
+| <img src="https://pbs.twimg.com/profile_images/2021447689398030336/eY9wm4_X_400x400.png" width="36" height="36" alt="AI2Human logo"> | AI2Human | [@ai2humannetwork](https://x.com/ai2humannetwork) |
 | <img src="https://pbs.twimg.com/profile_images/2055896281751633920/NeawiT3G_400x400.png" width="36" height="36" alt="AntFleet logo"> | AntFleet | [@AntFleetDev](https://x.com/AntFleetDev) |
 | <img src="https://pbs.twimg.com/profile_images/2061160773208956933/qPhvV6Gb_400x400.jpg" width="36" height="36" alt="Atrium logo"> | Atrium | [@atriumhermes](https://x.com/atriumhermes) · [atriumhermes.tech](https://atriumhermes.tech) |
 | <img src="https://coin-images.coingecko.com/coins/images/102173323/large/autonomopoly.jpg?1779000184" width="36" height="36" alt="Autonomopoly logo"> | Autonomopoly | [GeckoTerminal](https://www.geckoterminal.com/base/pools/0x84771828f44fcfbaae08e271ff74e272cc2934a3348ec724a475941185ce4eb9) |
@@ -30,6 +30,7 @@ These are the projects we know of that run Aeon, extend it, or integrate with th
 | <img src="https://pbs.twimg.com/profile_images/2021187758547664896/7tdqvR2z_400x400.jpg" width="36" height="36" alt="Baseline logo"> | Baseline | [@BaselineMarkets](https://x.com/BaselineMarkets) |
 | <img src="https://pbs.twimg.com/profile_images/2026627252511977474/r8GGxl52_400x400.jpg" width="36" height="36" alt="Bean logo"> | Bean | [@minebean_](https://x.com/minebean_) |
 | <img src="https://pbs.twimg.com/profile_images/2047719472455438336/CFrEyoNZ_400x400.jpg" width="36" height="36" alt="Blue Agent logo"> | Blue Agent | [@blueagent_](https://x.com/blueagent_) |
+| <img src="https://bontravail.xyz/brand/mark-1024.png" width="36" height="36" alt="bon travail logo"> | bon travail | [bontravail.xyz](https://bontravail.xyz) · bon travail Pack: Aeon agents find bugs, check fixes and pay humans |
 | <img src="https://pbs.twimg.com/profile_images/2040249335284387840/hIisggkp_400x400.png" width="36" height="36" alt="Capacitr logo"> | Capacitr | [@capacitr_xyz](https://x.com/capacitr_xyz) |
 | <img src="https://pbs.twimg.com/profile_images/2062754968852221952/QcEP9JKW_400x400.jpg" width="36" height="36" alt="Charon logo"> | Charon | [@Charon_AI](https://x.com/Charon_AI) |
 | <img src="https://pbs.twimg.com/profile_images/2027296134939684866/eTsFmewn_400x400.jpg" width="36" height="36" alt="Claw Harbor logo"> | Claw Harbor | [@ClawHarbor](https://x.com/ClawHarbor) |
@@ -76,6 +77,7 @@ These are the projects we know of that run Aeon, extend it, or integrate with th
 | <img src="https://pbs.twimg.com/profile_images/2056291951084032000/QJiBIXV-_400x400.jpg" width="36" height="36" alt="Signa logo"> | Signa | [@Signa_Agent](https://x.com/Signa_Agent) · [signaagent.xyz](https://www.signaagent.xyz) |
 | <img src="https://pbs.twimg.com/profile_images/2064718491668889600/S23rFUM6_400x400.jpg" width="36" height="36" alt="Simmer logo"> | Simmer | [@simmer_markets](https://x.com/simmer_markets) |
 | <img src="https://pbs.twimg.com/profile_images/2056536399864827904/sJpI8LLl_400x400.jpg" width="36" height="36" alt="Skim logo"> | Skim | [@skim402](https://x.com/skim402) · [skim402.com](https://skim402.com) |
+| <img src="https://www.tryskopos.xyz/apple-touch-icon.png" width="36" height="36" alt="skopos logo"> | skopos | [@tryskopos](https://x.com/tryskopos) · [tryskopos.xyz](https://www.tryskopos.xyz) · market reads from a self-hosted Aeon fork |
 | <img src="https://pbs.twimg.com/profile_images/2074036017712320512/zeatSErP_400x400.jpg" width="36" height="36" alt="Solvr logo"> | Solvr | [@solvrbot](https://x.com/solvrbot) |
 | <img src="https://sparkleware.fun/logo.png" width="36" height="36" alt="Sparkleware logo"> | Sparkleware | [@sparklewarefun](https://x.com/sparklewarefun) · [sparkleware.fun](https://sparkleware.fun) |
 | <img src="https://pbs.twimg.com/profile_images/2077110134409469952/ZYgPG9di_400x400.jpg" width="36" height="36" alt="Tachi logo"> | Tachi | [@smolekoma](https://x.com/smolekoma) |

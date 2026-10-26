@@ -31,6 +31,11 @@
 //   6. Schedule format - every skill and chain `schedule:` is workflow_dispatch,
 //      reactive, or a 5-field cron expression scripts/cron-due.sh accepts, so a
 //      typo (`*/0`, `61`, a 6th field) fails CI instead of silently never firing.
+//   7. Skill entry keys - every key on a skills: entry is one the repo reads
+//      (enabled, schedule, var, model, harness, attest), with a did-you-mean hint
+//      for a near miss, and an entry with `enabled: true` has a schedule:, a
+//      reactive: target or a chain step. A misspelled key is dropped by every
+//      reader, so the skill silently runs on defaults or never runs at all.
 //
 // Output contract:
 //   - Exit 0 + only PASS lines  => CLEAN
@@ -118,12 +123,16 @@ function analyzeCheckout(text) {
   const runStep = steps[runIdx];
   const runCond = normCond(runStep.ifCond);
 
-  // A preceding checkout "covers" Run if it is unconditional, or shares Run's exact
-  // condition, so it can never be skipped in a run where Run itself executes.
+  // A preceding checkout "covers" Run if it is unconditional, shares Run's exact
+  // condition, or is the leading conjunct of it (`C && X`), so it can never be
+  // skipped in a run where Run itself executes. An `||` on either side breaks that
+  // implication (`C && X || Y` runs without C), so it never counts as a conjunct.
   const covering = checkouts.find((s) => {
     if (steps.indexOf(s) >= runIdx) return false;
     const c = normCond(s.ifCond);
-    return c === null || c === runCond;
+    if (c === null || c === runCond) return true;
+    return runCond !== null && !c.includes('||') && !runCond.includes('||')
+      && runCond.startsWith(c + ' && ');
   });
 
   if (covering) {
@@ -220,7 +229,7 @@ function collectChainRefs(lines) {
     if ((m = raw.match(/consume:\s*\[([^\]]*)\]/))) {
       m[1].split(',').forEach((s) => push(s, i + 1));
     }
-    if ((m = raw.match(/(?:^|[\s-])skill:\s*([a-z0-9-]+)/))) {
+    if ((m = raw.match(/(?:^|[\s-])skill:\s*["']?([a-z0-9-]+)/))) {
       push(m[1], i + 1);
     }
   }
@@ -286,12 +295,14 @@ function collectReactiveRefs(lines) {
   const conditions = [];
   for (const [i, raw] of blockLines(lines, 'reactive')) {
     if (/^\s*#/.test(raw)) continue;
+    const line = stripYamlComment(raw).trimEnd();
     let m;
-    // A target skill is a 2-space key with nothing after the colon (`trigger:` is
-    // deeper-indented and the `- { on:, when: }` rows carry no bare 2-space key).
-    if ((m = raw.match(/^ {2}([a-z][a-z0-9-]+):\s*$/))) targets.push({ name: m[1], lineNum: i + 1 });
-    if ((m = raw.match(/\bon:\s*"?([a-zA-Z0-9_*-]+)"?/))) sources.push({ name: m[1], lineNum: i + 1 });
-    if ((m = raw.match(/\bwhen:\s*"([^"]+)"/))) conditions.push({ when: m[1], lineNum: i + 1 });
+    // A target skill is a 2-space key with nothing after the colon, or a one-line
+    // flow map (`repair: { trigger: [...] }`); `trigger:` is deeper-indented and
+    // the `- { on:, when: }` rows carry no bare 2-space key.
+    if ((m = line.match(/^ {2}([a-z][a-z0-9-]+):\s*(\{.*)?$/))) targets.push({ name: m[1], lineNum: i + 1 });
+    if ((m = line.match(/\bon:\s*"?([a-zA-Z0-9_*-]+)"?/))) sources.push({ name: m[1], lineNum: i + 1 });
+    if ((m = line.match(/\bwhen:\s*"([^"]+)"/))) conditions.push({ when: m[1], lineNum: i + 1 });
   }
   return { targets, sources, conditions };
 }
@@ -369,6 +380,15 @@ const CRON_FIELDS = [
 const MONTH_NAMES = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 const DOW_NAMES = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
 
+// Pure: a day-of-week field with names turned into numbers, as scripts/cron-due.sh
+// reads it. SUN closes a range as 7 (SAT-SUN is 6-7) unless the range also starts
+// on Sunday: SUN-SUN and 0-SUN stay Sunday only. A bare SUN stays 0.
+function dowToNumbers(field) {
+  let out = String(field).toUpperCase().replace(/(^|,)(SUN|0+)-SUN/g, '$1$2-0').split('-SUN').join('-7');
+  DOW_NAMES.forEach((n, i) => { out = out.split(n).join(String(i)); });
+  return out;
+}
+
 // Pure: returns null when valid, else a short reason.
 function validateSchedule(sched) {
   const s = String(sched).trim();
@@ -379,7 +399,7 @@ function validateSchedule(sched) {
     const [name, lo, hi] = CRON_FIELDS[f];
     let field = fields[f].toUpperCase();
     if (f === 3) MONTH_NAMES.forEach((n, i) => { field = field.split(n).join(String(i + 1)); });
-    if (f === 4) DOW_NAMES.forEach((n, i) => { field = field.split(n).join(String(i)); });
+    if (f === 4) field = dowToNumbers(field);
     for (const el of field.split(',')) {
       const m = el.match(/^(\*|(\d+)(?:-(\d+))?)(?:\/(\d+))?$/);
       if (!m) return 'bad ' + name + ' element "' + el + '"';
@@ -419,6 +439,205 @@ function checkSchedules(lines) {
   else pass('PASS schedules: all ' + all.length + ' schedule: values are workflow_dispatch, reactive, or valid 5-field cron');
 }
 
+// ---------------------------------------------------------------------------
+// Check 7 - skill entry keys. Every reader of a skills: entry looks keys up by
+// exact name (scheduler via scripts/parse-aeon-config.sh: enabled, schedule, var;
+// scripts/skill_entry.sh callers in resolve-harness.sh and the run workflow:
+// model, harness, attest; the dashboard's parseConfig: the first five), so a
+// misspelled key is silently dropped: `shedule:` leaves the skill unscheduled,
+// `enabld:` leaves it off, `modle:` runs it on the default model.
+// ---------------------------------------------------------------------------
+const SKILL_ENTRY_KEYS = ['enabled', 'schedule', 'var', 'model', 'harness', 'attest'];
+
+// Pure: strips a trailing `# comment` ('#' only opens one outside quotes and at
+// the start or after whitespace, so a var like "fix #12" survives).
+function stripYamlComment(s) {
+  let quote = null;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (quote) {
+      if (c === '\\' && quote === '"') i++;
+      else if (c === "'" && quote === "'" && s[i + 1] === "'") i++; // '' is an escaped quote
+      else if (c === quote) quote = null;
+    } else if (c === '"' || (c === "'" && (i === 0 || /[\s{[,:]/.test(s[i - 1])))) {
+      quote = c;
+    } else if (c === '#' && (i === 0 || /\s/.test(s[i - 1]))) {
+      return s.slice(0, i);
+    }
+  }
+  return s;
+}
+
+// Pure: walks flow-collection text, calling visit(char, index, depth) for every
+// character outside quotes. depth counts the open { and [ before the character.
+function walkFlow(text, visit) {
+  let quote = null;
+  let depth = 0;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (quote) {
+      if (c === '\\' && quote === '"') i++;
+      else if (c === "'" && quote === "'" && text[i + 1] === "'") i++; // '' is an escaped quote
+      else if (c === quote) quote = null;
+      continue;
+    }
+    if (c === '"' || (c === "'" && (i === 0 || /[\s{[,:]/.test(text[i - 1])))) { quote = c; continue; }
+    if (c === '}' || c === ']') depth--;
+    visit(c, i, depth);
+    if (c === '{' || c === '[') depth++;
+  }
+}
+
+// Pure: net open braces left by one line of a flow map.
+function flowDepth(text) {
+  let net = 0;
+  walkFlow(text, (c) => { if (c === '{') net++; else if (c === '}') net--; });
+  return net;
+}
+
+const unquote = (v) => v.trim().replace(/^(["'])(.*)\1$/, '$2');
+
+// Pure: the `key: value` items directly inside the outermost { } of flow text,
+// each with the offset it starts at.
+function flowItems(text) {
+  const open = text.indexOf('{');
+  const close = text.lastIndexOf('}');
+  if (open === -1 || close < open) return [];
+  const items = [];
+  let start = open + 1;
+  const push = (end) => {
+    const raw = text.slice(start, end);
+    const colon = raw.indexOf(':');
+    if (colon !== -1 && raw.slice(0, colon).trim()) {
+      items.push({ key: unquote(raw.slice(0, colon)), value: unquote(raw.slice(colon + 1)), offset: start + raw.search(/\S/) });
+    }
+  };
+  walkFlow(text.slice(0, close), (c, i, depth) => {
+    if (i > open && c === ',' && depth === 1) { push(i); start = i + 1; }
+  });
+  push(close);
+  return items;
+}
+
+// Pure: every entry of the skills: block as { name, lineNum, keys: [{ key, value,
+// lineNum }] }. Handles the three shapes skill_entry.sh reads: a one-line flow
+// map, a flow map spread over several lines, and an indented block map.
+function collectSkillEntries(lines) {
+  const rows = [...blockLines(lines, 'skills')];
+  const entries = [];
+  for (let r = 0; r < rows.length; r++) {
+    const [i, raw] = rows[r];
+    const head = raw.match(/^ {2}([A-Za-z0-9_-]+):\s*(.*)$/);
+    if (!head) continue;
+    const entry = { name: head[1], lineNum: i + 1, keys: [] };
+    entries.push(entry);
+
+    const body = [{ text: stripYamlComment(head[2]).trim(), lineNum: i + 1 }];
+    let k = r + 1;
+    if (body[0].text === '') {
+      body.length = 0;
+      for (; k < rows.length; k++) {
+        const [j, l] = rows[k];
+        if (/^\s*(#|$)/.test(l)) continue;
+        if (!/^ {3,}/.test(l)) break;
+        body.push({ text: stripYamlComment(l).trimEnd(), lineNum: j + 1 });
+      }
+    }
+    if (body.length === 0) continue;
+    if (body.length === 1 && body[0].text.startsWith('{') && flowDepth(body[0].text) > 0) {
+      let depth = flowDepth(body[0].text);
+      for (; k < rows.length && depth > 0; k++) {
+        const [j, l] = rows[k];
+        if (/^\s*(#|$)/.test(l)) continue;
+        body.push({ text: stripYamlComment(l).trimEnd(), lineNum: j + 1 });
+        depth += flowDepth(l);
+      }
+    }
+
+    if (body[0].text.trim().startsWith('{')) {
+      let joined = '';
+      const starts = [];
+      let depth = 0;
+      for (const b of body) {
+        starts.push({ offset: joined.length, lineNum: b.lineNum });
+        joined += b.text.trim() + ' ';
+        depth += flowDepth(b.text);
+        if (depth <= 0) break;
+      }
+      for (const it of flowItems(joined)) {
+        const at = [...starts].reverse().find((s) => s.offset <= it.offset);
+        entry.keys.push({ key: it.key, value: it.value, lineNum: at.lineNum });
+      }
+    } else {
+      const indent = body[0].text.match(/^ */)[0].length;
+      for (const b of body) {
+        const m = b.text.match(/^( *)([A-Za-z0-9_-]+):\s*(.*)$/);
+        if (m && m[1].length === indent) entry.keys.push({ key: m[2], value: unquote(m[3]), lineNum: b.lineNum });
+      }
+    }
+  }
+  return entries;
+}
+
+// Pure: optimal-string-alignment distance (one swap of neighbours costs 1, so
+// `modle` is one edit from `model`).
+function editDistance(a, b) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 0; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+    }
+  }
+  return d[a.length][b.length];
+}
+
+// Pure: the known key closest to `key`, or null when nothing is a plausible typo.
+function suggestSkillKey(key) {
+  const lower = key.toLowerCase();
+  let best = null;
+  let bestDist = Infinity;
+  for (const known of SKILL_ENTRY_KEYS) {
+    const dist = editDistance(lower, known);
+    if (dist < bestDist) { best = known; bestDist = dist; }
+  }
+  return bestDist <= (lower.length <= 4 ? 1 : 2) ? best : null;
+}
+
+// Pure: FAIL lines for the skills: block. An entry with `enabled: true` and no
+// schedule: is skipped by the scheduler (empty schedule), so it only runs if a
+// reactive: block or a chain dispatches it; `workflow_dispatch` is the explicit
+// spelling of an on-demand skill and is not flagged.
+function analyzeSkillKeys(lines) {
+  const problems = [];
+  const dispatched = new Set([
+    ...collectReactiveRefs(lines).targets.map((t) => t.name),
+    ...collectChainRefs(lines).map((r) => r.name),
+  ]);
+  for (const entry of collectSkillEntries(lines)) {
+    for (const { key, lineNum } of entry.keys) {
+      if (SKILL_ENTRY_KEYS.includes(key)) continue;
+      const hint = suggestSkillKey(key);
+      problems.push('FAIL: aeon.yml skills entry "' + entry.name + '" (line ' + lineNum + ') has unknown key "' + key + '"'
+        + (hint ? ' (did you mean "' + hint + '"?)' : ' (known keys: ' + SKILL_ENTRY_KEYS.join(', ') + ')'));
+    }
+    const value = (name) => entry.keys.filter((k) => k.key === name).pop();
+    const enabled = value('enabled');
+    const schedule = value('schedule');
+    if (enabled && enabled.value === 'true' && !(schedule && schedule.value) && !dispatched.has(entry.name)) {
+      problems.push('FAIL: aeon.yml skills entry "' + entry.name + '" (line ' + entry.lineNum + ') is enabled: true but has no schedule:, reactive trigger or chain step, so it never runs (use schedule: "workflow_dispatch" for an on-demand skill)');
+    }
+  }
+  return problems;
+}
+
+function checkSkillKeys(lines) {
+  const problems = analyzeSkillKeys(lines);
+  if (problems.length > 0) problems.forEach(fail);
+  else pass('PASS skill-keys: all ' + collectSkillEntries(lines).length + ' skills entries use known keys (' + SKILL_ENTRY_KEYS.join(', ') + ') and every enabled one can run');
+}
+
 function main() {
   checkCheckoutOrdering();
 
@@ -431,6 +650,7 @@ function main() {
     checkReactiveRefs(lines);
     checkChainWhen(lines);
     checkSchedules(lines);
+    checkSkillKeys(lines);
   }
 
   out.forEach((l) => console.log(l));
@@ -445,4 +665,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { analyzeCheckout, parseSteps, collectReactiveRefs, validateWhen, validateChainWhen, validateSchedule, collectSchedules };
+module.exports = { analyzeCheckout, parseSteps, collectReactiveRefs, validateWhen, validateChainWhen, validateSchedule, dowToNumbers, collectSchedules, collectSkillEntries, analyzeSkillKeys, suggestSkillKey };
