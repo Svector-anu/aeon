@@ -1,18 +1,17 @@
-Auto-merge merged nothing this run. None of the four open PRs on aeonfun/aeon qualified, so I sent no notification.
+Auto-merge merged nothing this run. None of the four open PRs on aeonfun/aeon passed the safety policy, so I sent no notification.
 
-Every PR failed the author allowlist, because `memory/watched-repos.md` has no Trusted Authors section. Only `dependabot[bot]`, `renovate[bot]` and `github-actions[bot]` are eligible, and none of these authors is one of them.
+| PR | Author | Verdict | Other blockers |
+|---|---|---|---|
+| #1272 | aaronjmars | `SKIP:author-not-allowlisted` | mergeStateStatus is BLOCKED |
+| #1268 | Svector-anu | `SKIP:author-not-allowlisted` | mergeStateStatus is BLOCKED |
+| #1267 | ether-btc | `SKIP:author-not-allowlisted` | fork, 859 lines (over the 500 cap), BLOCKED |
+| #1255 | NurstarK | `SKIP:author-not-allowlisted` | fork |
 
-| PR | Author | Skip reason |
-|---|---|---|
-| #1268 | Svector-anu | `SKIP:author-not-allowlisted:Svector-anu`. Also blocked: review required. |
-| #1267 | ether-btc | `SKIP:author-not-allowlisted:ether-btc`. Also a fork, 859 lines over the 500 cap, changes requested. |
-| #1255 | NurstarK | `SKIP:author-not-allowlisted:NurstarK`. Also a fork, and merge state still UNKNOWN. I didn't retry the lookup since the author check already fails. |
-| #1240 | AragAgg | `SKIP:author-not-allowlisted:AragAgg`. Also a fork, and in conflict with main. |
-
-Totals: merged=0, queued=0, qualified=0, considered=4, retry_capped=0.
+- **Allowlist:** `memory/watched-repos.md` has no `## Trusted Authors` section, so only the three bot logins are eligible. To have the agent's own PRs auto-merge, add aaronjmars (or whichever login opens them) under that heading.
+- **Retry cap:** no PR has any recorded attempts, so none is retry-capped.
 
 ## Summary
-- I queried the open PRs on aeonfun/aeon and applied the safety policy to each.
-- I logged the run under `### auto-merge` in `memory/logs/2026-10-25.md`.
-- I updated `last_run` in `memory/topics/auto-merge-state.json`. No retry entries were needed.
-- Follow-up for the operator: add `## Trusted Authors` to `memory/watched-repos.md` if you want trusted contributors' PRs to merge automatically. #1268 has green CI but still needs a review.
+- Checked the 4 open PRs on aeonfun/aeon against the policy.
+- Updated `memory/topics/auto-merge-state.json` (`last_run`).
+- Created `memory/logs/2026-10-26.md` with the auto-merge entry.
+- Follow-up: decide whether to add trusted authors.
