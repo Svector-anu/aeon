@@ -1,17 +1,11 @@
-Auto-merge merged nothing this run. None of the four open PRs on aeonfun/aeon passed the safety policy, so I sent no notification.
+Auto-merge merged nothing this run. I checked the 2 open PRs on aeonfun/aeon, and neither passed the safety policy.
 
-| PR | Author | Verdict | Other blockers |
-|---|---|---|---|
-| #1272 | aaronjmars | `SKIP:author-not-allowlisted` | mergeStateStatus is BLOCKED |
-| #1268 | Svector-anu | `SKIP:author-not-allowlisted` | mergeStateStatus is BLOCKED |
-| #1267 | ether-btc | `SKIP:author-not-allowlisted` | fork, 859 lines (over the 500 cap), BLOCKED |
-| #1255 | NurstarK | `SKIP:author-not-allowlisted` | fork |
+- **#1268** (Svector-anu, "fix(deploy-uni-hook)…"): skipped because the author isn't on the allowlist. It also shows `mergeStateStatus=UNKNOWN` and `REVIEW_REQUIRED`. I didn't retry the UNKNOWN state, since the author check already disqualifies it.
+- **#1267** (ether-btc, "[skills] Add github-filing-registry"): skipped because the author isn't on the allowlist. It's also a fork PR, 859 lines changed (over the 500 cap), `CHANGES_REQUESTED`, and `BLOCKED`.
 
-- **Allowlist:** `memory/watched-repos.md` has no `## Trusted Authors` section, so only the three bot logins are eligible. To have the agent's own PRs auto-merge, add aaronjmars (or whichever login opens them) under that heading.
-- **Retry cap:** no PR has any recorded attempts, so none is retry-capped.
+No notification was sent: nothing merged and no PR hit the retry cap. Both PRs need a human decision if you want them in.
 
 ## Summary
-- Checked the 4 open PRs on aeonfun/aeon against the policy.
-- Updated `memory/topics/auto-merge-state.json` (`last_run`).
-- Created `memory/logs/2026-10-26.md` with the auto-merge entry.
-- Follow-up: decide whether to add trusted authors.
+- Considered 2 PRs and merged 0. No PRs were queued and none hit the retry cap.
+- Updated `memory/topics/auto-merge-state.json` (the `last_run` timestamp is a placeholder I typed in, not the real clock time) and appended an `### auto-merge` entry to `memory/logs/2026-10-27.md`.
+- No follow-up needed from this skill.
