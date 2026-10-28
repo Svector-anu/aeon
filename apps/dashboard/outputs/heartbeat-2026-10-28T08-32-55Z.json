@@ -1,0 +1,23 @@
+{
+  "root": "card",
+  "state": {},
+  "elements": {
+    "card": {
+      "type": "Card",
+      "props": {
+        "title": "Heartbeat"
+      },
+      "children": [
+        "alert"
+      ]
+    },
+    "alert": {
+      "type": "Alert",
+      "props": {
+        "title": "STALLED: PR #5",
+        "message": "aeon-update sync, 63 upstream commits — open ~42h with no merge. Check whether it needs review or conflicts.",
+        "type": "warning"
+      }
+    }
+  }
+}
