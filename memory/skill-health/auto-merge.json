@@ -1,10 +1,10 @@
 {
   "skill": "auto-merge",
-  "last_analyzed": "2026-10-28T15:25:03Z",
-  "quality_score": 4,
-  "assessment": "Substantive skill execution: evaluated 4 PRs against merge policy, correctly rejected all due to author allowlisting, provided specific reasoning per PR, and surfaced actionable next step (add Trusted Authors section).",
+  "last_analyzed": "2026-10-29T17:54:47Z",
+  "quality_score": 3,
+  "assessment": "Skill ran successfully and produced clear, well-reasoned output with specific PR details and actionable next steps, but relies on unverifiable GitHub data.",
   "flags": [],
-  "avg_score": 3.93,
+  "avg_score": 3.87,
   "history": [
     {
       "date": "2026-10-10",
@@ -88,6 +88,12 @@
       "date": "2026-10-28",
       "score": 4,
       "ts": "2026-10-28T15:25:03Z",
+      "harness": "claude"
+    },
+    {
+      "date": "2026-10-29",
+      "score": 3,
+      "ts": "2026-10-29T17:54:47Z",
       "harness": "claude"
     }
   ]
