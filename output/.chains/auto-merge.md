@@ -1,22 +1,15 @@
-Auto-merge merged nothing this run. None of the four open PRs on aeonfun/aeon came from an allowlisted author, and no one is listed under Trusted Authors.
+No PRs were merged. Neither of the two open PRs on aeonfun/aeon passed the safety policy.
 
-| PR | Author | Verdict |
+| PR | Verdict | Reasons |
 |---|---|---|
-| #1292 | vaubandev | `SKIP:author-not-allowlisted` |
-| #1283 | normancomics | `SKIP:author-not-allowlisted` |
-| #1268 | Svector-anu | `SKIP:author-not-allowlisted` |
-| #1267 | ether-btc | `SKIP:author-not-allowlisted` |
+| #1283 "catalog: add PhantomOperator community skill pack" | `SKIP:author-not-allowlisted:normancomics` | It also comes from a fork. Its merge state is `DIRTY` and it has `CHANGES_REQUESTED`. |
+| #1268 "fix(deploy-uni-hook): unnest SwapParams/ModifyLiquidityParams" | `SKIP:author-not-allowlisted:Svector-anu` | Its merge state is `BLOCKED` and it needs a review (`REVIEW_REQUIRED`). |
 
-Other gates would have blocked most of them anyway:
-- **#1292:** from a fork, and its merge state is `BLOCKED`.
-- **#1283:** from a fork, changes were requested, and its merge state is `BLOCKED`.
-- **#1268:** its merge state was `UNKNOWN`, and review is still required.
-- **#1267:** from a fork, over the 500-line size cap at 848 additions, changes were requested, and it has merge conflicts.
+Neither author is on the allowlist. `memory/watched-repos.md` has no `## Trusted Authors` section, so only the three bot logins are eligible.
 
-No merges, no retry-cap hits and no notification, so nothing was sent. I didn't run the `UNKNOWN` retry for #1268 or the merge-queue lookup (step 2b), since the author gate already ruled every PR out.
+I sent no notification, since nothing merged and no PR hit the retry cap. I updated `last_run` in `memory/topics/auto-merge-state.json` and added an `### auto-merge` entry to `memory/logs/2026-10-30.md`. I didn't back up the state file or run `jq empty` on it before or after the edit.
 
 ## Summary
-- Checked 4 open PRs: 0 merged, 0 queued, 0 retry-capped.
-- Appended an `### auto-merge` entry to `memory/logs/2026-10-29.md`.
-- Updated `last_run` in `memory/topics/auto-merge-state.json`. I couldn't take the `.bak` copy first because the shell command needed approval, so I rewrote the file directly. It held no PR entries, so nothing was lost, but I didn't run `jq empty` on it either.
-- Follow-up: to let these authors' PRs through, add them under `## Trusted Authors` in `memory/watched-repos.md`.
+- Checked 2 open PRs on aeonfun/aeon, merged 0, queued 0.
+- The only edits were to `memory/topics/auto-merge-state.json` and `memory/logs/2026-10-30.md`.
+- Follow-up: if you want #1268 to be eligible, add `Svector-anu` under `## Trusted Authors`. It would still be blocked until it gets a review.
