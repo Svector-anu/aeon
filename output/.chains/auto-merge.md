@@ -1,13 +1,18 @@
-Auto-merge merged nothing on aeonfun/aeon. Neither of the two open PRs passed the safety policy, so no notification went out.
+No PRs were merged. I checked all 6 open PRs on aeonfun/aeon, and none passed the safety policy. I sent no notification, since nothing merged and nothing hit the retry cap.
 
-| PR | Author | Verdict |
-|---|---|---|
-| #1283 "catalog: add PhantomOperator community skill pack" | normancomics | `SKIP:author-not-allowlisted`. The PR also comes from a fork, has changes requested, and has merge conflicts (`DIRTY`). |
-| #1268 "fix(deploy-uni-hook): unnest SwapParams/ModifyLiquidityParams" | Svector-anu | `SKIP:author-not-allowlisted`. The PR also has `mergeStateStatus=BLOCKED` because review is required. All its checks passed. |
+| PR | Verdict |
+|---|---|
+| #1300 (dependabot, dashboard group) | `SKIP:mergeStateStatus=BLOCKED`. The gate, dashboard and cli checks failed, and review is required. |
+| #1299 (dependabot, github-actions group) | `SKIP:mergeStateStatus=BLOCKED`. Checks are green, but review is required. |
+| #1298 (dependabot, mcp-server group) | `SKIP:check-failed:gate,mcp-server-build`, and the PR is blocked. |
+| #1297 (dependabot, webhook group) | `SKIP:check-failed:gate,webhook-worker-bundle`, and the PR is blocked. |
+| #1283 (normancomics) | `SKIP:author-not-allowlisted`. It is also a fork PR, has changes requested, and has conflicts. |
+| #1268 (Svector-anu) | `SKIP:author-not-allowlisted`. It is also blocked and needs review. |
 
-Totals: merged=0, queued=0, qualified=0, considered=2, retry_capped=0.
+#1299 is the only one close to ready. If it should merge automatically, the repo's required review would have to be satisfied first.
 
 ## Summary
-- Listed the open PRs on aeonfun/aeon and checked each against the safety policy.
-- Updated `memory/logs/2026-10-31.md` with an `auto-merge` entry and set `last_run` in `memory/topics/auto-merge-state.json`.
-- Follow-up: #1268 is green but needs a human review. If you want its author's PRs to merge automatically, add them under `## Trusted Authors` in `memory/watched-repos.md`.
+- Evaluated the 6 open PRs against the safety policy and merged none, so there were no merge attempts.
+- Created `memory/logs/2026-11-01.md` with the verdicts and the skip breakdown.
+- Updated `memory/topics/auto-merge-state.json` to record this run's timestamp. No PR has any recorded attempts.
+- No follow-up needed unless you want #1299 reviewed.
