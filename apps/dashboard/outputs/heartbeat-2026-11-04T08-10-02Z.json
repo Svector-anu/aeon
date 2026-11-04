@@ -1,0 +1,49 @@
+{
+  "root": "root_card",
+  "state": {},
+  "elements": {
+    "root_card": {
+      "type": "Card",
+      "props": {
+        "title": "Heartbeat"
+      },
+      "children": [
+        "main_stack"
+      ]
+    },
+    "main_stack": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "lg"
+      },
+      "children": [
+        "failing_alert",
+        "separator_1",
+        "stalled_alert"
+      ]
+    },
+    "failing_alert": {
+      "type": "Alert",
+      "props": {
+        "title": "🔴 FAILING",
+        "message": "auto-merge (4 consecutive failures, last 2026-11-03 16:27 UTC), aeon-update (3 consecutive, 25% success rate), heartbeat (4 consecutive, last 2026-11-03 08:27 UTC). All three share the same last_error signature (harness telemetry JSON, likely a shared harness/API fault, not skill logic).",
+        "type": "error"
+      }
+    },
+    "separator_1": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "stalled_alert": {
+      "type": "Alert",
+      "props": {
+        "title": "🟡 STALLED",
+        "message": "PR #5 aeon-update/sync open since 2026-10-26 (~9d)",
+        "type": "warning"
+      }
+    }
+  }
+}
