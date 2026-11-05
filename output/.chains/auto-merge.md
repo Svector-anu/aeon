@@ -1,22 +1,11 @@
-Auto-merge ran live on aeonfun/aeon and merged nothing: none of the 6 open PRs passed the safety policy, so I sent no notification.
+No PRs were merged. Neither of the two open PRs on `aeonfun/aeon` passes the safety policy, so I sent no notification.
 
-All 6 failed the author allowlist. The only bot logins eligible are `dependabot[bot]`, `renovate[bot]` and `github-actions[bot]`, and `memory/watched-repos.md` has no Trusted Authors section.
+- **#1330** (ICP monitoring + deploy-check skill pack) is skipped for two reasons. The author, Svector-anu, isn't on the allowlist, and `mergeStateStatus` is `BLOCKED`. It is also 452 lines, under the 500 cap.
+- **#1283** (catalog: add PhantomOperator community skill pack) is skipped for three reasons. The author, normancomics, isn't on the allowlist, it comes from a fork, and `mergeStateStatus` is `DIRTY`.
 
-| PR | Author | Other blockers |
-|---|---|---|
-| #1333 | sentinelhood | fork, review required |
-| #1331 | Svector-anu | review required |
-| #1330 | Svector-anu | 1249 lines changed (over the 500 cap), review required |
-| #1328 | Svector-anu | 3787 lines changed (over the cap), `gate` check still running, review required |
-| #1316 | Svector-anu | review required |
-| #1283 | normancomics | fork, changes requested, merge state UNKNOWN |
-
-Five of the six also have merge status BLOCKED, mostly on "review required". I did not run the UNKNOWN re-query or the merge-queue lookup, since #1283 and the rest were already ruled out on author.
-
-Svector-anu looks like the repo's own contributor. If you want their PRs auto-merged, add them under `## Trusted Authors` in `memory/watched-repos.md`. #1330 and #1328 would still need the `auto-merge-large` label.
+No PR hit the retry cap. I updated the timestamp in `memory/topics/auto-merge-state.json` and added the log entry to `memory/logs/2026-11-05.md`.
 
 ## Summary
-- Checked 6 open PRs on aeonfun/aeon and merged 0.
-- Added an `### auto-merge` entry to `memory/logs/2026-11-04.md` with the per-PR skip reasons.
-- Set `last_run` in `memory/topics/auto-merge-state.json`.
-- Follow-up: decide whether to allowlist Svector-anu.
+- Considered 2 PRs; merged 0, queued 0, retry-capped 0.
+- Changed `memory/topics/auto-merge-state.json` and `memory/logs/2026-11-05.md`.
+- Follow-up: to let the operator's own PRs through (such as #1330), add their login under a `## Trusted Authors` section in `memory/watched-repos.md`. #1330 would still be blocked until its branch-protection requirements are met.
