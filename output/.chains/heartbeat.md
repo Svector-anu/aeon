@@ -1,16 +1,12 @@
-**Heartbeat (ambient): 🔴 DEGRADED.** The only broken skill is `aeon-update`. I sent no notification because it was already reported on 2026-11-04.
+The fleet is 🔴 DEGRADED because of `aeon-update`, which is unchanged since the last report. I sent no notification, since this was already reported in the last 48h.
 
-- **`aeon-update`:** it has failed 3 times in a row and has a 25% success rate (2 of 8 runs). The last failure was 2026-11-03 08:27 UTC.
-- **PR #5 (`aeon-update` sync):** still open, about 10 days now. The 10-29 log says it was already flagged.
-- **Recovered:** `auto-merge` (last ran 11-04 16:17, success) and `heartbeat` (11-04 08:08, success) both have 0 consecutive failures now.
-- **Not yet run:** `auto-workflow`.
-- **Issues and labels:** `memory/issues/INDEX.md` lists no open issues, and `gh issue list --label urgent` returned nothing.
-- **Memory:** `memory/MEMORY.md` has no flagged follow-ups.
-
-I rewrote `docs/status.md` with the current skill table. I also added today's entry to `memory/logs/2026-11-05.md`, using the Write tool because the shell redirect was refused.
+- **`aeon-update`:** its last run failed on 2026-11-03, with 3 consecutive failures and a 25% success rate (2 of 8 runs).
+- **Stalled PR:** PR #5, the `aeon-update` upstream sync, has been open about 11 days.
+- **`auto-merge` and `heartbeat`:** both have recovered, with 0 consecutive failures.
+- **`auto-workflow`:** it has never run, which is expected because it only runs on demand.
+- **Issues:** there are no open issues and no urgent-labelled GitHub issues, and nothing in memory is flagged for follow-up.
 
 ## Summary
-- Checked `cron-state.json`, PRs, issues and memory, and found the one item above.
-- Modified: `docs/status.md`.
-- Created: `memory/logs/2026-11-05.md`.
-- Follow-up for the operator: `aeon-update` needs a look, and PR #5 needs a review or merge decision.
+- I regenerated `docs/status.md`, now showing 🔴 DEGRADED, updated 2026-11-06 08:00 UTC.
+- I created `memory/logs/2026-11-06.md` with the heartbeat entry.
+- Follow-up for the operator: look at why `aeon-update` keeps failing and decide on PR #5.
