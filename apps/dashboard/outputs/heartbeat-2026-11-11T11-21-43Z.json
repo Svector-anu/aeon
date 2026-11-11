@@ -1,0 +1,66 @@
+{
+  "root": "card_main",
+  "state": {},
+  "elements": {
+    "card_main": {
+      "type": "Card",
+      "props": {
+        "title": "heartbeat",
+        "description": "Aeon skill health status"
+      },
+      "children": [
+        "stack_main"
+      ]
+    },
+    "stack_main": {
+      "type": "Stack",
+      "props": {
+        "direction": "vertical",
+        "gap": "md"
+      },
+      "children": [
+        "alert_automerge",
+        "sep1",
+        "alert_self",
+        "sep2",
+        "alert_stalled"
+      ]
+    },
+    "alert_automerge": {
+      "type": "Alert",
+      "props": {
+        "title": "FAILED: auto-merge & aeon-update",
+        "message": "auto-merge: 7 consecutive failures, 47% success rate (last 2026-11-10). aeon-update: 4 consecutive failures, 22% success rate (last 2026-11-09). Both share the same error signature (harness/subagent stats JSON), indicating a likely common harness-level cause.",
+        "type": "error"
+      }
+    },
+    "sep1": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "alert_self": {
+      "type": "Alert",
+      "props": {
+        "title": "FAILED: heartbeat",
+        "message": "heartbeat skill itself has 6 consecutive failures. Last successful run: 2026-11-06.",
+        "type": "error"
+      }
+    },
+    "sep2": {
+      "type": "Separator",
+      "props": {
+        "orientation": "horizontal"
+      }
+    },
+    "alert_stalled": {
+      "type": "Alert",
+      "props": {
+        "title": "STALLED: PR #5 aeon-update sync",
+        "message": "PR #5 (aeon-update sync) has been open for ~16 days with 63 upstream commits.",
+        "type": "warning"
+      }
+    }
+  }
+}
