@@ -1,25 +1,16 @@
-Heartbeat ran in ambient mode. The fleet is 🔴 DEGRADED, but nothing is new, so I sent no notification.
+The fleet is still degraded, but nothing new, so I sent no notification. Both findings were already reported on 2026-11-11 and are inside the 48h dedup window.
 
-**P0, failed and stuck skills**
-- **aeon-update:** last failed 2026-11-09, with 4 consecutive failures and a 22% success rate over 9 runs. This is the main problem.
-- **auto-merge:** it succeeded on 2026-11-11 and has 0 consecutive failures. Its 48% success rate (44 runs) is still under the 50% chronic-failure bar.
-- **heartbeat:** it recovered, with a 59% success rate. Its own entry is excluded from the stuck check.
-- **Shared cause:** all three failures show the same error signature, a harness stats JSON blob. That points to a common cause rather than three separate bugs.
-- **auto-workflow:** it has never run, which is normal because it only runs on demand.
+**Findings**
+- 🔴 `aeon-update` has failed 4 times in a row (22% success). Its last run was 2026-11-09 21:19 UTC.
+- 🟡 `auto-merge` has a 49% success rate over 45 runs. It has recovered and has 0 consecutive failures.
+- 🟡 The `aeon-update` sync PR (#5) has been open since 2026-10-26, about 18 days. `gh pr list` shows it as OPEN.
+- `auto-workflow` has never run. It's manual-dispatch only, so that's expected.
+- There are no open issues, no urgent-labelled issues, and nothing flagged in memory.
 
-**P1, PRs and issues**
-- PR #5 (the aeon-update sync) has been open about 17 days, so it is stalled.
-- There are no urgent issues.
-
-**P2 and P3**
-- Nothing is flagged in memory.
-- Nothing is missing from the schedule.
-
-All of this was already reported on 2026-11-11, so I skipped the notification under the 48-hour dedup rule.
+I rewrote `docs/status.md` with an overall status of 🔴 DEGRADED and today's timestamp. I also logged the run in `memory/logs/2026-11-13.md`.
 
 ## Summary
-- Rewrote `docs/status.md` with the 2026-11-12 08:00 UTC verdict and skill table.
-- Appended the `### heartbeat` entry to `memory/logs/2026-11-12.md` (`STATUS_PAGE=DEGRADED`).
-- **Follow-up for you:**
-  - Investigate the shared harness failure behind the aeon-update and auto-merge failures.
-  - Review or merge PR #5.
+- Ran the ambient fleet check and regenerated the status page.
+- Modified `docs/status.md`.
+- Created `memory/logs/2026-11-13.md`.
+- Follow-up for the operator: look at why `aeon-update` keeps failing, and review or close the stale sync PR #5.
