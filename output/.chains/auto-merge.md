@@ -1,19 +1,10 @@
-Auto-merge merged nothing on aeonfun/aeon this run: none of the 5 open PRs qualified, so no notification was sent.
+Auto-merge merged nothing this run. The one open PR on aeonfun/aeon, #1341 "List Hyperliquid CLI Pack in the community registry" (+23/-1, by wtfsayo), was skipped with `SKIP:author-not-allowlisted:wtfsayo`.
 
-All 5 were skipped because their authors are not allowlisted. The watched-repos file has no `## Trusted Authors` section, so only the three bot logins are eligible.
-
-| PR | Author | Reasons skipped |
-|---|---|---|
-| #1355 | Svector-anu | author-not-allowlisted; base is `compute/provider-primeintellect`, not main |
-| #1353 | Svector-anu | author-not-allowlisted; base is `compute/foundation`, not main |
-| #1352 | Svector-anu | author-not-allowlisted; 2255 lines, over the size cap; BLOCKED (review required) |
-| #1341 | wtfsayo | author-not-allowlisted; fork PR; DIRTY (conflicts) |
-| #1283 | normancomics | author-not-allowlisted; fork PR; DIRTY (conflicts); changes requested |
-
-No PR has reached the retry cap.
+- **Why skipped:** wtfsayo isn't one of the three bot logins, and `memory/watched-repos.md` has no Trusted Authors section.
+- **Not checked:** GitHub still reported its merge state as UNKNOWN. I didn't retry or look at its checks, since the author gate already disqualifies it.
+- **Notification:** none sent. There were no merges and no retry-capped PRs.
 
 ## Summary
-- Checked the 5 open PRs against the safety policy and merged none.
-- Updated `memory/topics/auto-merge-state.json` (`last_run` only).
-- Appended the `### auto-merge` entry to `memory/logs/2026-11-12.md`.
-- Follow-up for the operator: if Svector-anu's compute PRs should be auto-merged, add them under `## Trusted Authors` in `memory/watched-repos.md`. #1352 would still be blocked by the size cap and the pending review.
+- Considered 1 PR: merged=0, queued=0, qualified=0, retry-capped=0.
+- Modified `memory/topics/auto-merge-state.json` (`last_run` updated) and `memory/logs/2026-11-13.md` (auto-merge entry added).
+- Follow-up: if #1341 should be auto-merged, add wtfsayo under `## Trusted Authors` in `memory/watched-repos.md`. Otherwise it needs a manual merge.
