@@ -11,13 +11,13 @@
   },
   "auto-merge": {
     "last_dispatch": "2026-11-14T16:06:05Z",
-    "last_status": "dispatched",
-    "last_success": "2026-11-13T17:42:58Z",
-    "total_runs": 46,
-    "total_successes": 23,
+    "last_status": "success",
+    "last_success": "2026-11-14T16:07:12Z",
+    "total_runs": 47,
+    "total_successes": 24,
     "total_failures": 23,
     "consecutive_failures": 0,
-    "success_rate": 0.5,
+    "success_rate": 0.51,
     "last_quality_score": 4,
     "last_failed": "2026-11-10T18:54:17Z",
     "last_error": "ackground\":0,\"foreground\":0,\"unset\":0},\"started_in_background\":0,\"max_depth\":0,\"spawned_by_subagents\":0,\"completed\":0,\"failed\":0,\"killed\":{\"parent\":0,\"user\":0,\"system\":0},\"refused\":{\"depth_limit\":0,\"c"
