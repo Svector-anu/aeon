@@ -1,18 +1,11 @@
-Auto-merge ran live on `aeonfun/aeon`. It merged nothing, and I sent no notification because there was nothing to report.
+No PRs were merged: the only open PR on aeonfun/aeon, #1341, failed the safety policy. I sent no notification, since nothing merged and no PR hit the retry cap.
 
-Neither of the two open PRs passed the safety policy:
+#1341 is from `wtfsayo`, who is not on the allowlist, and it comes from a fork. It also has merge conflicts (`mergeStateStatus=DIRTY`). Verdict: `SKIP:author-not-allowlisted:wtfsayo`.
 
-| PR | Author | Verdict |
-|---|---|---|
-| #1363 (skill-scan injection phrases) | yusasecurity | `SKIP:author-not-allowlisted`. It is also a fork PR, `mergeStateStatus=BLOCKED` and `REVIEW_REQUIRED`. |
-| #1341 (Hyperliquid CLI Pack registry listing) | wtfsayo | `SKIP:author-not-allowlisted`. It is also a fork PR, `mergeStateStatus=DIRTY` with conflicts and `REVIEW_REQUIRED`. |
-
-Totals: merged=0, queued=0, qualified=0, considered=2, retry_capped=0.
-
-I did not query the merge queue (step 2b) or check CI status for these PRs. Both already failed the author allowlist, so neither could have merged.
+Totals: merged=0, queued=0, qualified=0, considered=1, retry_capped=0.
 
 ## Summary
-- Listed open PRs for the one watched repo and applied the safety policy; both were skipped for the reasons above.
-- Updated `memory/topics/auto-merge-state.json` (`last_run` only) and appended an `### auto-merge` entry to `memory/logs/2026-11-14.md`.
-- I skipped the `.bak` copy before the state write because the permission layer blocked the combined command. The state file was unchanged except for `last_run`, so nothing was at risk.
-- No follow-up needed. Both PRs are external-contributor forks that need human review.
+- Listed open PRs on aeonfun/aeon (the only watched repo) and applied the safety policy.
+- Updated `memory/topics/auto-merge-state.json` (`last_run` only, no PR entries).
+- Created `memory/logs/2026-11-15.md` with the `### auto-merge` entry.
+- Follow-up: none needed. #1341 would need a human to review it, and its author would need adding under `## Trusted Authors` in `memory/watched-repos.md` before it could ever auto-merge.
